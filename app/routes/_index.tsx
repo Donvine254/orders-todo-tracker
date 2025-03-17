@@ -1,4 +1,4 @@
-import Header from "../components/ui/header";
+import Header from "~/components/ui/header";
 import type { MetaFunction } from "@remix-run/node";
 import { motion } from "framer-motion";
 export const meta: MetaFunction = () => {

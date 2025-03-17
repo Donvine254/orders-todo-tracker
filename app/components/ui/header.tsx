@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Clipboard, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Button } from "./button";
+import { Button } from "~/components/ui/button";
 import { formatDate } from "../../lib/utils";
 
 export default function Header() {
@@ -29,7 +29,7 @@ export default function Header() {
           <Clipboard className="h-8 w-8" />
         </div>
         <div>
-          <h1 className="text-3xl md:text-4xl font-light text-todo-primary tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-light text-todo-primary tracking-tight dark:text-todo-light ">
             Orders Todo list
           </h1>
         </div>
@@ -39,7 +39,7 @@ export default function Header() {
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>
         <Button
           variant="outline"
-          className="border-todo-primary text-todo-primary hover:bg-todo-light"
+          className="border-todo-primary text-todo-primary "
           onClick={() => navigate("/setup")}>
           <Settings className="h-4 w-4 mr-2" />
           Setup
