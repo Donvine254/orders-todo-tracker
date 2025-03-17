@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 160 30% 95%;
+    --foreground: 160 30% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 30% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 30% 20%;
+
+    --primary: 160 30% 40%;
+    --primary-foreground: 160 30% 98%;
+
+    --secondary: 160 15% 90%;
+    --secondary-foreground: 160 30% 30%;
+
+    --muted: 160 15% 90%;
+    --muted-foreground: 160 15% 40%;
+
+    --accent: 160 15% 90%;
+    --accent-foreground: 160 30% 30%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 160 15% 85%;
+    --input: 160 15% 85%;
+    --ring: 160 30% 40%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 160 30% 5%;
+    --foreground: 160 30% 98%;
+
+    --card: 160 30% 5%;
+    --card-foreground: 160 30% 98%;
+
+    --popover: 160 30% 5%;
+    --popover-foreground: 160 30% 98%;
+
+    --primary: 160 30% 40%;
+    --primary-foreground: 160 30% 98%;
+
+    --secondary: 160 15% 15%;
+    --secondary-foreground: 160 15% 90%;
+
+    --muted: 160 15% 15%;
+    --muted-foreground: 160 15% 65%;
+
+    --accent: 160 15% 15%;
+    --accent-foreground: 160 15% 90%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 160 15% 20%;
+    --input: 160 15% 20%;
+    --ring: 160 30% 40%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  
+  /* Custom ScrollBar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dark .glassmorphism {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.orders-table {
+  @apply w-full border-collapse;
+}
+
+.orders-table th {
+  @apply bg-todo-primary text-white p-3 text-left font-medium;
+}
+
+.orders-table th:first-child {
+  @apply rounded-tl-md;
+}
+
+.orders-table th:last-child {
+  @apply rounded-tr-md;
+}
+
+.orders-table tr {
+  @apply transition-all duration-200;
+}
+
+.orders-table tr:not(.completed):hover {
+  @apply bg-todo-hover;
+}
+
+.orders-table td {
+  @apply p-3 border-b border-gray-100;
+}
+
+.orders-table .completed {
+  @apply opacity-60;
+}
+
+.orders-table .completed td {
+  @apply line-through;
+}
+
+.status-card {
+  @apply p-4 rounded-md flex flex-col items-center justify-center shadow-sm;
+  @apply transition-all duration-300 hover:shadow-md hover:scale-[1.02];
+}
+
+.priority-tag {
+  @apply px-3 py-1 rounded-full text-sm font-medium text-white inline-block;
+}
+
+.form-appear {
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.dark .orders-table th {
+  @apply bg-todo-primary text-white;
+}
+
+.dark .orders-table tr:not(.completed):hover {
+  @apply bg-gray-800/40;
+}
+
+.dark .orders-table td {
+  @apply border-gray-800;
+}
