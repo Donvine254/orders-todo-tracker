@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { getTodos, toggleTodoCompletion, deleteTodo } from "~/lib/todo";
 import { TodoOrder } from "~/types";
-import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
+import { formatDateTime, isOverdue, isDueToday, cn } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Button } from "./button";
-import { Pencil, Trash2 } from "lucide-react";
+import { ArrowDownUpIcon, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import EditTodoDialog from "./edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
@@ -96,17 +96,57 @@ const TodoTable = () => {
     return className;
   };
 
+  function handleSort(column: string) {
+    console.log(column);
+    toast.error("Functionality not implemented!");
+  }
+
   return (
     <>
       <div className="overflow-x-auto rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 animate-fadeIn">
         <table className="orders-table">
           <thead>
             <tr>
-              <th className="w-16">Status</th>
-              <th className="w-32"># Order</th>
-              <th className="w-20">Pages</th>
-              <th className="w-40 whitespace-nowrap">Due date</th>
-              <th className="w-28">Priority</th>
+              <th className="whitespace-nowrap w-fit">
+                <button
+                  onClick={() => handleSort("status")}
+                  className="flex items-center gap-2">
+                  Status
+                  <ArrowDownUpIcon className="h-4 w-4" />
+                </button>
+              </th>
+              <th className="w-32">
+                <button
+                  onClick={() => handleSort("order")}
+                  className="flex items-center gap-2">
+                  # Order
+                  <ArrowDownUpIcon className="h-4 w-4" />
+                </button>
+              </th>
+              <th className="w-20">
+                <button
+                  onClick={() => handleSort("pages")}
+                  className="flex items-center gap-2">
+                  Pages
+                  <ArrowDownUpIcon className="h-4 w-4" />
+                </button>
+              </th>
+              <th className="w-40 whitespace-nowrap">
+                <button
+                  onClick={() => handleSort("due_date")}
+                  className="flex items-center gap-2">
+                  Due date
+                  <ArrowDownUpIcon className="h-4 w-4" />
+                </button>
+              </th>
+              <th className="w-28">
+                <button
+                  onClick={() => handleSort("priority")}
+                  className="flex items-center gap-2">
+                  Priority
+                  <ArrowDownUpIcon className="h-4 w-4" />
+                </button>
+              </th>
               <th className="w-32">Assigned to</th>
               <th>Note</th>
               <th className="w-24 text-center">Actions</th>
@@ -114,61 +154,72 @@ const TodoTable = () => {
           </thead>
           <tbody>
             <AnimatePresence>
-              {todos.map((todo) => (
-                <motion.tr
-                  key={todo.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className={getRowClassName(todo)}>
-                  <td className="text-center">
-                    <Checkbox
-                      checked={todo.completed}
-                      onCheckedChange={() => handleToggleCompletion(todo.id)}
-                      className="data-[state=checked]:bg-todo-primary data-[state=checked]:border-todo-primary"
-                    />
-                  </td>
-                  <td>{todo.orderNumber}</td>
-                  <td>{todo.pages}</td>
-                  <td
-                    className={`whitespace-nowrap ${
-                      isOverdue(new Date(todo.dueDate)) && !todo.completed
-                        ? "text-red-600 dark:text-red-400 font-medium"
-                        : ""
-                    }`}>
-                    {formatDateTime(new Date(todo.dueDate))}
-                  </td>
-                  <td>
-                    <span
-                      className={`priority-tag ${getPriorityStyles(
-                        todo.priority
-                      )}`}>
-                      {todo.priority}
-                    </span>
-                  </td>
-                  <td>{todo.assignedTo}</td>
-                  <td>{todo.note}</td>
-                  <td>
-                    <div className="flex justify-center space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(todo)}
-                        className="h-8 w-8 text-gray-500 hover:text-todo-primary dark:text-gray-400 dark:hover:text-todo-primary">
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => openDeleteDialog(todo.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-500">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
+              {todos
+                .sort(
+                  (a, b) =>
+                    new Date(a.dueDate).getTime() -
+                    new Date(b.dueDate).getTime()
+                )
+                .map((todo) => (
+                  <motion.tr
+                    key={todo.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className={cn(
+                      getRowClassName(todo),
+                      isOverdue(new Date(todo.dueDate)) &&
+                        !todo.completed &&
+                        "text-red-600 dark:text-red-400 font-medium"
+                    )}>
+                    <td className="text-center">
+                      <Checkbox
+                        checked={todo.completed}
+                        onCheckedChange={() => handleToggleCompletion(todo.id)}
+                        className="data-[state=checked]:bg-todo-primary data-[state=checked]:border-todo-primary"
+                      />
+                    </td>
+                    <td>{todo.orderNumber}</td>
+                    <td>{todo.pages}</td>
+                    <td
+                      className={`whitespace-nowrap ${
+                        isOverdue(new Date(todo.dueDate)) && !todo.completed
+                          ? "text-red-600 dark:text-red-400 font-medium"
+                          : ""
+                      }`}>
+                      {formatDateTime(new Date(todo.dueDate))}
+                    </td>
+                    <td>
+                      <span
+                        className={`priority-tag ${getPriorityStyles(
+                          todo.priority
+                        )}`}>
+                        {todo.priority}
+                      </span>
+                    </td>
+                    <td>{todo.assignedTo}</td>
+                    <td>{todo.note}</td>
+                    <td>
+                      <div className="flex justify-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(todo)}
+                          className="h-8 w-8 text-gray-500 hover:text-todo-primary dark:text-gray-400 dark:hover:text-todo-primary">
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openDeleteDialog(todo.id)}
+                          className="h-8 w-8 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-500">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
             </AnimatePresence>
           </tbody>
         </table>

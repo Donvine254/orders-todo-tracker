@@ -26,7 +26,7 @@ const SetupPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-b from-todo-light to-white p-4 md:p-6">
+      className="min-h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6 flex items-center">
           <Button
@@ -42,7 +42,7 @@ const SetupPage = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}>
-          <Card className="shadow-md border-0">
+          <Card className="shadow-md border">
             <CardHeader>
               <CardTitle className="text-2xl font-medium text-todo-primary">
                 System Setup
