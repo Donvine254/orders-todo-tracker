@@ -1,6 +1,5 @@
-
-export type Priority = 'Low' | 'Medium' | 'High';
-export type Assignee = 'Jecinta' | 'Donvine' | 'Mwambire' | '';
+export type Priority = "low" | "medium" | "high";
+export type Assignee = "Jecinta" | "Donvine" | "Mwambire" | "";
 
 export interface TodoOrder {
   id: string;
@@ -9,7 +8,7 @@ export interface TodoOrder {
   dueDate: Date;
   priority: Priority;
   assignedTo: string;
-  note: string;
+  note?: string | null;
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;

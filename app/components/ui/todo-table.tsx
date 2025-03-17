@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getTodos, toggleTodoCompletion, deleteTodo } from "~/lib/todo";
-import { TodoOrder } from "~/types";
+import { Priority, TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday, cn } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Button } from "./button";
@@ -19,25 +19,24 @@ import {
   AlertDialogTitle,
 } from "./alert-dialog";
 
-const TodoTable = () => {
-  const [todos, setTodos] = useState<TodoOrder[]>([]);
-  const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+const TodoTable = ({ data }: { data: TodoOrder[] }) => {
+  // const [todos, setTodos] = useState<TodoOrder[]>(data);
+  // const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
+  // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    refreshTodos();
-  }, []);
+  // useEffect(() => {
+  //   refreshTodos();
+  // }, []);
 
-  const refreshTodos = () => {
-    setTodos(getTodos());
-  };
+  // const refreshTodos = () => {
+  //   setTodos(getTodos());
+  // };
 
   const handleToggleCompletion = (id: string) => {
     const result = toggleTodoCompletion(id);
     if (result) {
-      refreshTodos();
       toast.success("Task status updated");
     }
   };
@@ -56,7 +55,6 @@ const TodoTable = () => {
     if (todoToDelete) {
       const success = deleteTodo(todoToDelete);
       if (success) {
-        refreshTodos();
         toast.success("Order deleted successfully");
       } else {
         toast.error("Failed to delete order");
@@ -66,13 +64,13 @@ const TodoTable = () => {
     }
   };
 
-  const getPriorityStyles = (priority: string) => {
+  const getPriorityStyles = (priority: Priority) => {
     switch (priority) {
-      case "High":
+      case "high":
         return "bg-todo-high";
-      case "Medium":
+      case "medium":
         return "bg-todo-medium";
-      case "Low":
+      case "low":
         return "bg-todo-low";
       default:
         return "bg-gray-400";
@@ -154,83 +152,87 @@ const TodoTable = () => {
           </thead>
           <tbody>
             <AnimatePresence>
-              {todos
-                .sort(
-                  (a, b) =>
-                    new Date(a.dueDate).getTime() -
-                    new Date(b.dueDate).getTime()
-                )
-                .map((todo) => (
-                  <motion.tr
-                    key={todo.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className={cn(
-                      getRowClassName(todo),
-                      isOverdue(new Date(todo.dueDate)) &&
-                        !todo.completed &&
-                        "text-red-600 dark:text-red-400 font-medium"
-                    )}>
-                    <td className="text-center">
-                      <Checkbox
-                        checked={todo.completed}
-                        onCheckedChange={() => handleToggleCompletion(todo.id)}
-                        className="data-[state=checked]:bg-todo-primary data-[state=checked]:border-todo-primary"
-                      />
-                    </td>
-                    <td>{todo.orderNumber}</td>
-                    <td>{todo.pages}</td>
-                    <td
-                      className={`whitespace-nowrap ${
-                        isOverdue(new Date(todo.dueDate)) && !todo.completed
-                          ? "text-red-600 dark:text-red-400 font-medium"
-                          : ""
-                      }`}>
-                      {formatDateTime(new Date(todo.dueDate))}
-                    </td>
-                    <td>
-                      <span
-                        className={`priority-tag ${getPriorityStyles(
-                          todo.priority
-                        )}`}>
-                        {todo.priority}
-                      </span>
-                    </td>
-                    <td>{todo.assignedTo}</td>
-                    <td>{todo.note}</td>
-                    <td>
-                      <div className="flex justify-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEdit(todo)}
-                          className="h-8 w-8 text-gray-500 hover:text-todo-primary dark:text-gray-400 dark:hover:text-todo-primary">
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openDeleteDialog(todo.id)}
-                          className="h-8 w-8 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-500">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
+              {data &&
+                data.length > 0 &&
+                data
+                  .sort(
+                    (a, b) =>
+                      new Date(a.dueDate).getTime() -
+                      new Date(b.dueDate).getTime()
+                  )
+                  .map((todo) => (
+                    <motion.tr
+                      key={todo.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className={cn(
+                        getRowClassName(todo),
+                        isOverdue(new Date(todo.dueDate)) &&
+                          !todo.completed &&
+                          "text-red-600 dark:text-red-400 font-medium"
+                      )}>
+                      <td className="text-center">
+                        <Checkbox
+                          checked={todo.completed}
+                          onCheckedChange={() =>
+                            handleToggleCompletion(todo.id)
+                          }
+                          className="data-[state=checked]:bg-todo-primary data-[state=checked]:border-todo-primary"
+                        />
+                      </td>
+                      <td>{todo.orderNumber}</td>
+                      <td>{todo.pages}</td>
+                      <td
+                        className={`whitespace-nowrap ${
+                          isOverdue(new Date(todo.dueDate)) && !todo.completed
+                            ? "text-red-600 dark:text-red-400 font-medium"
+                            : ""
+                        }`}>
+                        {formatDateTime(new Date(todo.dueDate))}
+                      </td>
+                      <td>
+                        <span
+                          className={`priority-tag capitalize ${getPriorityStyles(
+                            todo.priority
+                          )}`}>
+                          {todo.priority}
+                        </span>
+                      </td>
+                      <td>{todo.assignedTo}</td>
+                      <td>{todo.note}</td>
+                      <td>
+                        <div className="flex justify-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(todo)}
+                            className="h-8 w-8 text-gray-500 hover:text-todo-primary dark:text-gray-400 dark:hover:text-todo-primary">
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openDeleteDialog(todo.id)}
+                            className="h-8 w-8 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-500">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
             </AnimatePresence>
           </tbody>
         </table>
       </div>
 
-      <EditTodoDialog
+      {/* <EditTodoDialog
         todo={editingTodo}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
         onSave={refreshTodos}
-      />
+      /> */}
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

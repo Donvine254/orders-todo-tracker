@@ -5,8 +5,13 @@ import StatusCards from "~/components/ui/status-cards";
 import AddTodoButton from "~/components/ui/add-todo";
 import { useEffect, useState } from "react";
 import { getTodoStats } from "~/lib/todo";
-import { TodoStats } from "~/types";
+import { TodoOrder, TodoStats } from "~/types";
 import TodoTable from "~/components/ui/todo-table";
+import { OrderTable } from "~/db/schema";
+import { db } from "~/db";
+import { eq } from "drizzle-orm";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -17,7 +22,16 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async () => {
+  const todos = await db
+    .select()
+    .from(OrderTable)
+    .where(eq(OrderTable.completed, false));
+  return json(todos);
+};
 export default function Index() {
+  const orders = useLoaderData<typeof loader>();
+
   const [stats, setStats] = useState<TodoStats>({
     dueToday: 0,
     overdue: 0,
@@ -49,7 +63,7 @@ export default function Index() {
         </div>
       </div>
       <hr />
-      <TodoTable />
+      <TodoTable data={orders} />
     </motion.div>
   );
 }
