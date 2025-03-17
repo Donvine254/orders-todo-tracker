@@ -41,7 +41,7 @@ const EditTodoDialog = ({
   const [formData, setFormData] = useState<Partial<TodoOrder>>({
     pages: 1,
     dueDate: new Date(),
-    priority: "Medium",
+    priority: "Low",
     assignedTo: "",
     note: "",
     completed: false,
@@ -62,7 +62,7 @@ const EditTodoDialog = ({
       setFormData({
         pages: 1,
         dueDate,
-        priority: "Medium",
+        priority: "Low",
         assignedTo: "",
         note: "",
         completed: false,
@@ -78,6 +78,7 @@ const EditTodoDialog = ({
   };
 
   const handleSubmit = () => {
+    toast.success("Processing...");
     try {
       if (!formData.pages || formData.pages < 1) {
         toast.error("Please enter a valid number of pages");
@@ -134,6 +135,7 @@ const EditTodoDialog = ({
               onChange={(e) =>
                 handleChange("pages", parseInt(e.target.value) || 1)
               }
+              required
               className="col-span-3"
             />
           </div>
@@ -153,7 +155,8 @@ const EditTodoDialog = ({
               onChange={(e) =>
                 handleChange("dueDate", new Date(e.target.value))
               }
-              className="col-span-3"
+              className="col-span-3 dark:bg-gray-100 dark:text-gray-900"
+              required
             />
           </div>
 
@@ -204,7 +207,7 @@ const EditTodoDialog = ({
               id="note"
               value={formData.note || ""}
               onChange={(e) => handleChange("note", e.target.value)}
-              className="col-span-3"
+              className="col-span-3 "
               rows={3}
             />
           </div>

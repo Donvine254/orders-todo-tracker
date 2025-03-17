@@ -6,6 +6,7 @@ import AddTodoButton from "~/components/ui/add-todo";
 import { useEffect, useState } from "react";
 import { getTodoStats } from "~/lib/todo";
 import { TodoStats } from "~/types";
+import TodoTable from "~/components/ui/todo-table";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -23,7 +24,7 @@ export default function Index() {
     inProgress: 0,
     completed: 0,
   });
-
+  console.log(stats);
   const refreshStats = () => {
     setStats(getTodoStats());
   };
@@ -47,6 +48,8 @@ export default function Index() {
           <AddTodoButton onAdd={refreshStats} />
         </div>
       </div>
+      <hr />
+      <TodoTable />
     </motion.div>
   );
 }
