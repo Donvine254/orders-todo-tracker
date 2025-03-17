@@ -30,7 +30,7 @@ export default function Header() {
         </div>
         <div>
           <h1 className="text-3xl md:text-4xl font-light text-todo-primary tracking-tight">
-            To-do list
+            Orders Todo list
           </h1>
         </div>
       </div>
