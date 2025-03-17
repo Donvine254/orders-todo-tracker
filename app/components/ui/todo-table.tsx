@@ -118,7 +118,7 @@ const TodoTable = () => {
               <th className="w-32">
                 <button
                   onClick={() => handleSort("order")}
-                  className="flex items-center gap-2">
+                  className="flex items-center gap-2 whitespace-nowrap">
                   # Order
                   <ArrowDownUpIcon className="h-4 w-4" />
                 </button>
@@ -147,7 +147,7 @@ const TodoTable = () => {
                   <ArrowDownUpIcon className="h-4 w-4" />
                 </button>
               </th>
-              <th className="w-32">Assigned to</th>
+              <th className="w-32 whitespace-nowrap">Assigned to</th>
               <th>Note</th>
               <th className="w-24 text-center">Actions</th>
             </tr>
