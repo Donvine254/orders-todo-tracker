@@ -51,11 +51,14 @@ export async function action({ request }: { request: Request }) {
 
     if (method === "PUT") {
       // Update an order
-      const { id, data } = await request.json();
-      if (!id || !data)
+      const { id, completed } = await request.json();
+      if (!id || !completed)
         return Response.json({ error: "Missing data" }, { status: 400 });
 
-      await db.update(OrderTable).set(data).where(eq(OrderTable.id, id));
+      await db
+        .update(OrderTable)
+        .set({ completed: completed })
+        .where(eq(OrderTable.id, id));
 
       return Response.json({ success: true });
     }

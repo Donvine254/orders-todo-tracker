@@ -88,6 +88,10 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         toast.error("Please select a due date");
         return;
       }
+      if (!formData.orderNumber) {
+        toast.error("Please provide a valid order number");
+        return;
+      }
 
       if (todo) {
         // Update existing todo
@@ -101,7 +105,9 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         toast.success("New order added successfully");
       }
       revalidator.revalidate();
-      onOpenChange(false);
+      setTimeout(() => {
+        onOpenChange(false);
+      }, 100);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
       console.error("Error saving todo:", error);
