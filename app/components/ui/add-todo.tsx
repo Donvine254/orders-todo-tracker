@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import EditTodoDialog from "./edit-dialog";
 import { motion } from "framer-motion";
 
-const AddTodoButton = ({ onAdd }: { onAdd: () => void }) => {
+const AddTodoButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
@@ -25,7 +25,6 @@ const AddTodoButton = ({ onAdd }: { onAdd: () => void }) => {
         todo={null}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        onSave={onAdd}
       />
     </>
   );

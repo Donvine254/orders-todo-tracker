@@ -25,17 +25,28 @@ export async function action({ request }: { request: Request }) {
 
     if (method === "POST") {
       // Parse request data
-      const data: any = await request.json();
-      if (!data.orderNumber)
+      const { orderNumber, pages, dueDate, priority, assignedTo, note } =
+        await request.json();
+
+      if (!orderNumber || !pages || !dueDate || !priority) {
         return Response.json(
-          { error: "Order Number is required" },
+          { error: "Missing required fields" },
           { status: 400 }
         );
-
-      // Insert new order into database
-      await db.insert(OrderTable).values({ ...data });
-
-      return Response.json({ success: true });
+      }
+      const formattedDueDate = new Date(dueDate); // ✅ Convert to a Date object
+      const newOrder = await db
+        .insert(OrderTable)
+        .values({
+          orderNumber,
+          pages,
+          dueDate: formattedDueDate, // ✅ Pass a Date object, not a string
+          priority,
+          assignedTo,
+          note,
+        })
+        .returning();
+      return Response.json({ success: true, order: newOrder });
     }
 
     if (method === "PUT") {

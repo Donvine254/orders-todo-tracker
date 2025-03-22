@@ -3,9 +3,6 @@ import type { MetaFunction } from "@remix-run/node";
 import { motion } from "framer-motion";
 import StatusCards from "~/components/ui/status-cards";
 import AddTodoButton from "~/components/ui/add-todo";
-import { useEffect, useState } from "react";
-import { getTodoStats } from "~/lib/todo";
-import { TodoStats } from "~/types";
 import { OrderTable } from "~/db/schema";
 import { db } from "~/db";
 import { eq } from "drizzle-orm";
@@ -32,20 +29,6 @@ export const loader = async () => {
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
 
-  const [stats, setStats] = useState<TodoStats>({
-    dueToday: 0,
-    overdue: 0,
-    inProgress: 0,
-    completed: 0,
-  });
-  console.log(stats);
-  const refreshStats = () => {
-    setStats(getTodoStats());
-  };
-
-  useEffect(() => {
-    refreshStats();
-  }, []);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -59,7 +42,7 @@ export default function Index() {
           <h2 className="text-xl font-medium text-gray-800 dark:text-gray-200">
             Orders
           </h2>
-          <AddTodoButton onAdd={refreshStats} />
+          <AddTodoButton />
         </div>
       </div>
       <hr className="mb-4" />

@@ -464,9 +464,6 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         todo={editingTodo}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onSave={() => {
-          console.log("done");
-        }}
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

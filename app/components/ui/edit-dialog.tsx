@@ -19,25 +19,22 @@ import {
   SelectValue,
 } from "./select";
 import { Checkbox } from "./checkbox";
-import { addTodo, updateTodo } from "~/lib/todo";
+import { updateTodo } from "~/lib/todo";
 import { formatDateForInput } from "~/lib/utils";
 import { toast } from "sonner";
+import { createTodoOrder } from "~/lib/orders";
+import { useRevalidator } from "@remix-run/react";
 
 interface EditTodoDialogProps {
   todo: TodoOrder | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: () => void;
 }
 
 // const ASSIGNEES: Assignee[] = ['Jecinta', 'Donvine', 'Mwambire', ''];
 
-const EditTodoDialog = ({
-  todo,
-  open,
-  onOpenChange,
-  onSave,
-}: EditTodoDialogProps) => {
+const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
+  const revalidator = useRevalidator();
   const [formData, setFormData] = useState<Partial<TodoOrder>>({
     orderNumber: undefined,
     pages: 1,
@@ -81,7 +78,6 @@ const EditTodoDialog = ({
 
   const handleSubmit = () => {
     toast.success("Processing...");
-    console.log(formData);
     try {
       if (!formData.pages || formData.pages < 1) {
         toast.error("Please enter a valid number of pages");
@@ -99,16 +95,12 @@ const EditTodoDialog = ({
         toast.success("Order updated successfully");
       } else {
         // Create new todo
-        addTodo(
-          formData as Omit<
-            TodoOrder,
-            "id" | "orderNumber" | "createdAt" | "updatedAt"
-          >
+        createTodoOrder(
+          formData as Omit<TodoOrder, "id" | "createdAt" | "updatedAt">
         );
         toast.success("New order added successfully");
       }
-
-      onSave();
+      revalidator.revalidate();
       onOpenChange(false);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
@@ -136,7 +128,7 @@ const EditTodoDialog = ({
               min="6"
               value={formData.orderNumber}
               onChange={(e) =>
-                handleChange("orderNumber", parseInt(e.target.value) || 1)
+                handleChange("orderNumber", parseInt(e.target.value) || 0)
               }
               required
               className="col-span-3"
@@ -151,9 +143,7 @@ const EditTodoDialog = ({
               type="number"
               min="1"
               value={formData.pages}
-              onChange={(e) =>
-                handleChange("pages", parseInt(e.target.value) || 1)
-              }
+              onChange={(e) => handleChange("pages", parseInt(e.target.value))}
               required
               className="col-span-3"
             />
@@ -192,9 +182,9 @@ const EditTodoDialog = ({
                 <SelectValue placeholder="Select priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Low">Low</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="High">High</SelectItem>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
               </SelectContent>
             </Select>
           </div>
