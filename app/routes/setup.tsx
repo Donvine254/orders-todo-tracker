@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "~/components/ui/button";
 import {
@@ -9,14 +9,33 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { ChevronLeft, Users, Settings, Database, Clock } from "lucide-react";
+import {
+  ChevronLeft,
+  Users,
+  Settings,
+  Database,
+  Clock,
+  Loader2,
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { motion } from "framer-motion";
 
 const SetupPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("team");
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 flex justify-center items-center">
+        <Loader2 size={64} className="animate-spin" />
+      </div>
+    );
+  }
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
