@@ -5,13 +5,13 @@ export interface TodoOrder {
   id: string;
   orderNumber: string;
   pages: number;
-  dueDate: Date;
+  dueDate: string | Date;
   priority: Priority;
   assignedTo: string;
   note?: string | null;
-  completed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  completed: boolean | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface TodoStats {

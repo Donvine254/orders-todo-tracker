@@ -5,13 +5,14 @@ import StatusCards from "~/components/ui/status-cards";
 import AddTodoButton from "~/components/ui/add-todo";
 import { useEffect, useState } from "react";
 import { getTodoStats } from "~/lib/todo";
-import { TodoOrder, TodoStats } from "~/types";
-import TodoTable from "~/components/ui/todo-table";
+import { TodoStats } from "~/types";
+// import TodoTable from "~/components/ui/todo-table";
 import { OrderTable } from "~/db/schema";
 import { db } from "~/db";
 import { eq } from "drizzle-orm";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import OrdersTable from "~/components/ui/orders-table";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -62,8 +63,8 @@ export default function Index() {
           <AddTodoButton onAdd={refreshStats} />
         </div>
       </div>
-      <hr />
-      <TodoTable data={orders} />
+      <hr className="mb-4" />
+      <OrdersTable data={orders} />
     </motion.div>
   );
 }
