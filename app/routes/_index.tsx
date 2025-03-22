@@ -5,7 +5,6 @@ import StatusCards from "~/components/ui/status-cards";
 import AddTodoButton from "~/components/ui/add-todo";
 import { OrderTable } from "~/db/schema";
 import { db } from "~/db";
-import { eq } from "drizzle-orm";
 import { useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/ui/orders-table";
 export const meta: MetaFunction = () => {
@@ -19,10 +18,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-  const todos = await db
-    .select()
-    .from(OrderTable)
-    .where(eq(OrderTable.completed, false));
+  const todos = await db.select().from(OrderTable);
   return Response.json(todos);
 };
 

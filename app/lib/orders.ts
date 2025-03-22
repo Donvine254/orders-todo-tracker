@@ -1,15 +1,6 @@
 import { toast } from "sonner";
 import { TodoOrder } from "~/types";
 
-export async function markOrderAsCompleted(id: string) {
-  try {
-    console.log(id);
-  } catch (error) {
-    console.error("Error marking order as completed:", error);
-    throw new Error("Failed to update order");
-  }
-}
-
 export async function createTodoOrder(
   data: Omit<TodoOrder, "id" | "createdAt" | "updatedAt">
 ) {
@@ -32,6 +23,44 @@ export async function createTodoOrder(
   } catch (error) {
     console.error("Error creating order:", error);
     toast.error("Failed to create order");
+    throw error;
+  }
+}
+
+export async function updateOrder(
+  id: string,
+  data: Partial<Omit<TodoOrder, "id" | "createdAt" | "updatedAt">>
+) {
+  try {
+    if (!id || !data) {
+      throw new Error("Missing order ID or data to update");
+    }
+
+    if (data.dueDate) {
+      const parsedDate = new Date(data.dueDate);
+      if (isNaN(parsedDate.getTime())) {
+        throw new Error("Invalid dueDate format");
+      }
+      data.dueDate = parsedDate.toISOString();
+    }
+    const response = await fetch("/orders", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, data }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update order");
+    }
+
+    toast.success("Order updated successfully");
+    return await response.json();
+    // eslint-disable-next-line
+  } catch (error: any) {
+    console.error("Error updating order:", error);
+    toast.error(error.message || "Failed to update order");
     throw error;
   }
 }

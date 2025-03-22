@@ -46,14 +46,15 @@ import {
   TableHead,
   TableCell,
 } from "./table";
-import { markOrderAsCompleted } from "~/lib/orders";
+import { updateOrder } from "~/lib/orders";
+import { useRevalidator } from "@remix-run/react";
 
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
-
+  const revalidator = useRevalidator();
   // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -61,13 +62,11 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [rowSelection, setRowSelection] = useState({});
 
   // add function to toggle order as completed
-  const handleToggleCompletion = async (id: string) => {
-    try {
-      await markOrderAsCompleted(id);
-      toast.success("Task status updated");
-    } catch (error) {
-      toast.error("Failed to update task status");
-    }
+  const handleToggleCompletion = async (id: string, currentStatus: boolean) => {
+    await updateOrder(id, { completed: !currentStatus });
+    setTimeout(() => {
+      revalidator.revalidate();
+    }, 100);
   };
 
   const handleEdit = (todo: TodoOrder) => {
@@ -133,7 +132,9 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
           <div className="text-center">
             <Checkbox
               checked={row.original.completed}
-              onCheckedChange={() => handleToggleCompletion(row.original.id)}
+              onCheckedChange={() =>
+                handleToggleCompletion(row.original.id, row.original.completed)
+              }
               className="data-[state=checked]:bg-todo-primary data-[state=checked]:border-todo-primary"
             />
           </div>
