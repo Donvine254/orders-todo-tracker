@@ -148,7 +148,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         accessorKey: "orderNumber",
-        header: ({ column }) => {
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -164,7 +164,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         accessorKey: "pages",
-        header: ({ column }) => {
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -180,7 +180,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         accessorKey: "dueDate",
-        header: ({ column }) => {
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -209,7 +209,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         accessorKey: "priority",
-        header: ({ column }) => {
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -236,7 +236,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         accessorKey: "assignedTo",
-        header: ({ column }) => {
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -388,7 +388,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         </div>
 
         <div className="rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 animate-fadeIn overflow-hidden">
-          <Table>
+          <Table className="orders-table">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
