@@ -39,9 +39,10 @@ const EditTodoDialog = ({
   onSave,
 }: EditTodoDialogProps) => {
   const [formData, setFormData] = useState<Partial<TodoOrder>>({
+    orderNumber: undefined,
     pages: 1,
     dueDate: new Date(),
-    priority: "Low",
+    priority: "low",
     assignedTo: "",
     note: "",
     completed: false,
@@ -60,9 +61,10 @@ const EditTodoDialog = ({
       dueDate.setHours(dueDate.getHours() + 2);
 
       setFormData({
+        orderNumber: undefined,
         pages: 1,
         dueDate,
-        priority: "Low",
+        priority: "low",
         assignedTo: "",
         note: "",
         completed: false,
@@ -79,6 +81,7 @@ const EditTodoDialog = ({
 
   const handleSubmit = () => {
     toast.success("Processing...");
+    console.log(formData);
     try {
       if (!formData.pages || formData.pages < 1) {
         toast.error("Please enter a valid number of pages");
@@ -115,7 +118,7 @@ const EditTodoDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-medium">
             {todo ? "Edit Order" : "Add New Order"}
@@ -123,6 +126,22 @@ const EditTodoDialog = ({
         </DialogHeader>
 
         <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="orderNUmber" className="text-right">
+              # Order
+            </Label>
+            <Input
+              id="order-number"
+              type="number"
+              min="6"
+              value={formData.orderNumber}
+              onChange={(e) =>
+                handleChange("orderNumber", parseInt(e.target.value) || 1)
+              }
+              required
+              className="col-span-3"
+            />
+          </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="pages" className="text-right">
               Pages
@@ -219,7 +238,7 @@ const EditTodoDialog = ({
             <div className="col-span-3 flex items-center">
               <Checkbox
                 id="completed"
-                checked={formData.completed}
+                checked={formData.completed as boolean}
                 onCheckedChange={(checked) =>
                   handleChange("completed", !!checked)
                 }

@@ -6,11 +6,9 @@ import AddTodoButton from "~/components/ui/add-todo";
 import { useEffect, useState } from "react";
 import { getTodoStats } from "~/lib/todo";
 import { TodoStats } from "~/types";
-// import TodoTable from "~/components/ui/todo-table";
 import { OrderTable } from "~/db/schema";
 import { db } from "~/db";
 import { eq } from "drizzle-orm";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/ui/orders-table";
 export const meta: MetaFunction = () => {
@@ -28,9 +26,8 @@ export const loader = async () => {
     .select()
     .from(OrderTable)
     .where(eq(OrderTable.completed, false));
-  return json(todos);
+  return Response.json(todos);
 };
-
 
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
