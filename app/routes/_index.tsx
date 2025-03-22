@@ -33,7 +33,7 @@ export default function Index() {
       className="min-h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         <Header />
-        <StatusCards />
+        <StatusCards data={orders} />
         <div className="flex justify-between items-center my-6">
           <h2 className="text-xl font-medium text-gray-800 dark:text-gray-200">
             Orders

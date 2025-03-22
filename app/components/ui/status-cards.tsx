@@ -1,15 +1,10 @@
-import { TodoStats } from "~/types";
+import { TodoOrder, TodoStats } from "~/types";
 import { Clock, AlertTriangle, RotateCcw, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { getStats } from "~/lib/stats";
 
-const StatusCards = () => {
-  const stats: TodoStats = {
-    dueToday: 0,
-    overdue: 0,
-    inProgress: 0,
-    completed: 0,
-  };
-
+const StatusCards = ({ data }: { data: TodoOrder[] }) => {
+  const stats: TodoStats = getStats(data);
   const container = {
     hidden: { opacity: 0 },
     show: {
