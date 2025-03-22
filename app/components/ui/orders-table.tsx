@@ -135,7 +135,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       {
         accessorKey: "completed",
         header: "Status",
-        cell: ({ row }) => (
+        cell: ({ row }: { row: any }) => (
           <div className="text-center">
             <Checkbox
               checked={row.original.completed}
@@ -193,7 +193,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             </Button>
           );
         },
-        cell: ({ row }) => {
+        cell: ({ row }: { row: any }) => {
           const dueDate = new Date(row.original.dueDate);
           const isLate = isOverdue(dueDate) && !row.original.completed;
 
@@ -222,7 +222,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             </Button>
           );
         },
-        cell: ({ row }) => (
+        cell: ({ row }: { row: any }) => (
           <span
             className={`priority-tag ${getPriorityStyles(
               row.original.priority
@@ -230,7 +230,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             {row.original.priority}
           </span>
         ),
-        filterFn: (row, id, value) => {
+        filterFn: (row: any, id: string, value: any) => {
           return value.includes(row.getValue(id));
         },
       },
@@ -249,7 +249,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             </Button>
           );
         },
-        filterFn: (row, id, value) => {
+        filterFn: (row: any, id: string, value: any) => {
           return value.includes(row.getValue(id));
         },
       },
@@ -259,7 +259,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       },
       {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({ row }: { row: any }) => {
           return (
             <div className="flex justify-center space-x-2">
               <Button
