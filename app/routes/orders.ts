@@ -54,14 +54,16 @@ export async function action({ request }: { request: Request }) {
       const { id, data } = await request.json();
       if (!id || !data)
         return Response.json({ error: "Missing data" }, { status: 400 });
-
-      await db
+      if (data.dueDate) {
+        data.dueDate = new Date(data.dueDate);
+      }
+      const updatedOrder = await db
         .update(OrderTable)
         .set({ ...data, updatedAt: new Date() })
         .where(eq(OrderTable.id, id))
         .returning();
 
-      return Response.json({ success: true });
+      return Response.json({ success: true, order: updatedOrder });
     }
 
     if (method === "DELETE") {

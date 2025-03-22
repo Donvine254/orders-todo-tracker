@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
-import { getTodoStats } from "~/lib/todo";
 import { TodoStats } from "~/types";
 import { Clock, AlertTriangle, RotateCcw, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 const StatusCards = () => {
-  const [stats, setStats] = useState<TodoStats>({
+  const stats: TodoStats = {
     dueToday: 0,
     overdue: 0,
     inProgress: 0,
     completed: 0,
-  });
-
-  useEffect(() => {
-    setStats(getTodoStats());
-  }, []);
+  };
 
   const container = {
     hidden: { opacity: 0 },

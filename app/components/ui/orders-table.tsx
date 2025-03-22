@@ -1,12 +1,10 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { useState, useMemo } from "react";
-import { deleteTodo } from "~/lib/todo";
 import { TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Button } from "./button";
 import { Pencil, Trash2, ArrowUpDown } from "lucide-react";
-import { toast } from "sonner";
 import EditTodoDialog from "./edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -46,7 +44,7 @@ import {
   TableHead,
   TableCell,
 } from "./table";
-import { updateOrder } from "~/lib/orders";
+import { updateOrder, deleteOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
 
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
@@ -79,14 +77,12 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (todoToDelete) {
-      const success = deleteTodo(todoToDelete);
-      if (success) {
-        toast.success("Order deleted successfully");
-      } else {
-        toast.error("Failed to delete order");
-      }
+      await deleteOrder(todoToDelete);
+      setTimeout(() => {
+        revalidator.revalidate();
+      }, 100);
       setTodoToDelete(null);
       setDeleteDialogOpen(false);
     }

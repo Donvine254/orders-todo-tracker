@@ -19,10 +19,9 @@ import {
   SelectValue,
 } from "./select";
 import { Checkbox } from "./checkbox";
-import { updateTodo } from "~/lib/todo";
 import { formatDateForInput } from "~/lib/utils";
 import { toast } from "sonner";
-import { createTodoOrder } from "~/lib/orders";
+import { createTodoOrder, updateOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
 
 interface EditTodoDialogProps {
@@ -95,8 +94,17 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
 
       if (todo) {
         // Update existing todo
-        updateTodo(todo.id, formData);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, createdAt, updatedAt, ...updateData } = formData;
+        updateOrder(todo.id, {
+          ...updateData,
+          dueDate: new Date(formData.dueDate),
+        });
         toast.success("Order updated successfully");
+        revalidator.revalidate();
+        setTimeout(() => {
+          onOpenChange(false);
+        }, 100);
       } else {
         // Create new todo
         createTodoOrder(

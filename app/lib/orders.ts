@@ -31,6 +31,7 @@ export async function updateOrder(
   id: string,
   data: Partial<Omit<TodoOrder, "id" | "createdAt" | "updatedAt">>
 ) {
+  console.log(data);
   try {
     if (!id || !data) {
       throw new Error("Missing order ID or data to update");
@@ -61,6 +62,34 @@ export async function updateOrder(
   } catch (error: any) {
     console.error("Error updating order:", error);
     toast.error(error.message || "Failed to update order");
+    throw error;
+  }
+}
+
+export async function deleteOrder(id: string) {
+  try {
+    if (!id) {
+      throw new Error("Order ID is required");
+    }
+
+    const response = await fetch(`/orders`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete order");
+    }
+
+    toast.success("Order deleted successfully");
+    return await response.json();
+    // eslint-disable-next-line
+  } catch (error: any) {
+    console.error("Error deleting order:", error);
+    toast.error(error.message || "Failed to delete order");
     throw error;
   }
 }
