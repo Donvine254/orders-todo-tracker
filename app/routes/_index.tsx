@@ -30,6 +30,8 @@ export const loader = async () => {
     .where(eq(OrderTable.completed, false));
   return json(todos);
 };
+
+
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
 

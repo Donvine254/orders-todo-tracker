@@ -14,6 +14,15 @@ export interface TodoOrder {
   updatedAt: Date | string;
 }
 
+export interface OrderData {
+  orderNumber: string;
+  pages: number;
+  dueDate: string;
+  priority: Priority;
+  assignedTo?: string;
+  note?: string;
+}
+
 export interface TodoStats {
   dueToday: number;
   overdue: number;

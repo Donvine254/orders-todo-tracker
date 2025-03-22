@@ -1,6 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useMemo } from "react";
-import { toggleTodoCompletion, deleteTodo } from "~/lib/todo";
+import { useState, useMemo } from "react";
+import { deleteTodo } from "~/lib/todo";
 import { TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
@@ -46,6 +46,7 @@ import {
   TableHead,
   TableCell,
 } from "./table";
+import { markOrderAsCompleted } from "~/lib/orders";
 
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
@@ -59,19 +60,13 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  useEffect(() => {
-    refreshTodos();
-  }, []);
-
-  const refreshTodos = () => {
-    return null;
-  };
-
-  const handleToggleCompletion = (id: string) => {
-    const result = toggleTodoCompletion(id);
-    if (result) {
-      refreshTodos();
+  // add function to toggle order as completed
+  const handleToggleCompletion = async (id: string) => {
+    try {
+      await markOrderAsCompleted(id);
       toast.success("Task status updated");
+    } catch (error) {
+      toast.error("Failed to update task status");
     }
   };
 
@@ -89,7 +84,6 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
     if (todoToDelete) {
       const success = deleteTodo(todoToDelete);
       if (success) {
-        refreshTodos();
         toast.success("Order deleted successfully");
       } else {
         toast.error("Failed to delete order");
@@ -470,7 +464,9 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         todo={editingTodo}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onSave={refreshTodos}
+        onSave={() => {
+          console.log("done");
+        }}
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
