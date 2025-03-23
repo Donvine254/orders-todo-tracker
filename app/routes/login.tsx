@@ -1,44 +1,43 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect } from "@remix-run/node";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { toast } from "sonner";
+import { login } from "~/lib/auth.server";
+import { Loader2 } from "lucide-react";
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  if (!email || !password) {
+    return Response.json(
+      { error: "Email and password are required" },
+      { status: 400 }
+    );
+  }
 
-  // Redirect if already authenticated
-  //   if (isAuth) {
-  //     return <Navigate to="/" replace />;
-  //   }
+  try {
+    const session = await login(email, password);
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": session,
+      },
+    });
+    // eslint-disable-next-line
+  } catch (error: any) {
+    return Response.json(
+      { error: error.message || "Invalid email or password" },
+      { status: 401 }
+    );
+  }
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsSubmitting(true);
-
-    try {
-      //   const success = await login({ email, password });
-      const success = true;
-      if (success) {
-        toast.success("Login successful!");
-        navigate("/");
-      } else {
-        setError("Invalid email or password. Please try again.");
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+export default function Login() {
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
@@ -51,42 +50,31 @@ const Login = () => {
             </p>
           </div>
           <div className="space-y-4">
-            {error && (
+            {actionData?.error && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{actionData.error}</AlertDescription>
               </Alert>
             )}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <Form method="post" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+                <Input id="email" type="email" name="email" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <Input id="password" type="password" name="password" required />
               </div>
               <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Signing in..." : "Sign In"}
+                {isSubmitting ? (
+                  <Loader2 size={24} className="animate-spin" />
+                ) : (
+                  "Sign In"
+                )}
               </Button>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Login;
+}
