@@ -311,7 +311,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
                     ?.setFilterValue(value === "completed");
                 }
               }}
-              defaultValue="all">
+              defaultValue="inprogress">
               <SelectTrigger>
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
