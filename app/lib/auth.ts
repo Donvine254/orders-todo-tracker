@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { createCookie } from "@remix-run/node";
 import bcrypt from "bcryptjs";
-const SECRET_KEY = new TextEncoder().encode(process.env.VITE_JWT_SECRET!);
+const SECRET_KEY = new TextEncoder().encode(import.meta.env.VITE_JWT_SECRET!);
 
 const TOKEN_EXPIRY = 24 * 60 * 60;
 
@@ -16,8 +16,8 @@ const TOKEN_EXPIRY = 24 * 60 * 60;
 // hashPassword();
 
 const user = {
-  email: process.env.VITE_USER_EMAIL!,
-  password_digest: process.env.VITE_USER_SECRET!,
+  email: import.meta.env.VITE_USER_EMAIL!,
+  password_digest: import.meta.env.VITE_USER_SECRET!,
 };
 
 const sessionCookie = createCookie("session", {
