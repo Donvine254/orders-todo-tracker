@@ -11,6 +11,8 @@ import {
 import { sql } from "drizzle-orm";
 
 export const priorityEnum = pgEnum("priority", ["low", "medium", "high"]);
+
+export const roleEnum = pgEnum("role", ["admin", "user"]);
 export const OrderTable = pgTable(
   "Order",
   {
@@ -38,5 +40,27 @@ export const OrderTable = pgTable(
       table.dueDate,
       table.completed
     ),
+  })
+);
+
+export const UserTable = pgTable(
+  "User",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    username: varchar("username", { length: 255 }).notNull().unique(),
+    role: roleEnum("role").default("user").notNull(),
+    passwordDigest: varchar("password_digest", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .$onUpdate(() => sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => ({
+    emailIndx: index("email").on(table.email),
+    usernameIndx: index("username").on(table.username),
   })
 );

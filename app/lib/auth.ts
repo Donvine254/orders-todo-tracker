@@ -6,7 +6,7 @@ const SECRET_KEY = new TextEncoder().encode(import.meta.env.VITE_JWT_SECRET!);
 const TOKEN_EXPIRY = 24 * 60 * 60;
 
 // async function hashPassword() {
-//   const password = "YourPasswordHere";
+//   const password = "Donvine@2030";
 //   const saltRounds = 10;
 //   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
