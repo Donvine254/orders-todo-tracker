@@ -3,7 +3,7 @@ import { createCookie } from "@remix-run/node";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET!);
+const SECRET_KEY = new TextEncoder().encode(process.env.VITE_JWT_SECRET!);
 
 const TOKEN_EXPIRY = 24 * 60 * 60;
 
@@ -18,8 +18,8 @@ const TOKEN_EXPIRY = 24 * 60 * 60;
 // hashPassword();
 
 const user = {
-  email: process.env.USER_EMAIL!,
-  password_digest: process.env.USER_SECRET!,
+  email: process.env.VITE_USER_EMAIL!,
+  password_digest: process.env.VITE_USER_SECRET!,
 };
 
 const sessionCookie = createCookie("session", {
