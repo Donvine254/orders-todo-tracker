@@ -23,10 +23,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request }: { request: Request }) => {
-  // const isAuthenticated = await isAuth(request);
-  // if (!isAuthenticated) {
-  //   return redirect("/login");
-  // }
+  const isAuthenticated = await isAuth(request);
+  if (!isAuthenticated) {
+    return redirect("/login");
+  }
   const todos = await db
     .select()
     .from(OrderTable)

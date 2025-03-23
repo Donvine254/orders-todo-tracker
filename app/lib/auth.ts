@@ -5,12 +5,17 @@ import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-console.log(
-  "process:" + process,
-  "secret key:" + SECRET_KEY,
-  "resolved_secret" + process.env.SECRET_KEY
-);
 const TOKEN_EXPIRY = 24 * 60 * 60;
+
+// async function hashPassword() {
+//   const password = "YourPasswordHere";
+//   const saltRounds = 10;
+//   const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+//   console.log("Hashed Password:", hashedPassword);
+// }
+
+// hashPassword();
 
 const user = {
   email: process.env.USER_EMAIL!,
