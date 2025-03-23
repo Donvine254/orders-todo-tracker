@@ -61,9 +61,9 @@ const SetupPage = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}>
-          <Card className="shadow-md border">
+          <Card className="shadow-md border py-4">
             <CardHeader>
-              <CardTitle className="text-2xl font-medium text-todo-primary">
+              <CardTitle className="text-2xl font-medium text-todo-primary ">
                 System Setup
               </CardTitle>
               <CardDescription>
@@ -76,7 +76,7 @@ const SetupPage = () => {
                 defaultValue="team"
                 value={activeTab}
                 onValueChange={handleTabChange}>
-                <TabsList className="grid grid-cols-3 mb-6">
+                <TabsList className="flex justify-between gap-4 mb-6 overflow-x-auto overflow-y-hidden w-full py-4">
                   <TabsTrigger
                     value="team"
                     className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
