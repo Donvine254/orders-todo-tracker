@@ -39,7 +39,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
     pages: 1,
     dueDate: new Date(),
     priority: "low",
-    assignedTo: "",
+    assignedTo: "Donvine",
     note: "",
     completed: false,
   });
@@ -61,7 +61,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         pages: 1,
         dueDate,
         priority: "low",
-        assignedTo: "",
+        assignedTo: "Donvine",
         note: "",
         completed: false,
       });
@@ -100,22 +100,20 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
           ...updateData,
           dueDate: new Date(formData.dueDate),
         });
-        toast.success("Order updated successfully");
         revalidator.revalidate();
         setTimeout(() => {
           onOpenChange(false);
-        }, 100);
+        }, 500);
       } else {
         // Create new todo
         createTodoOrder(
           formData as Omit<TodoOrder, "id" | "createdAt" | "updatedAt">
         );
-        toast.success("New order added successfully");
       }
       revalidator.revalidate();
       setTimeout(() => {
         onOpenChange(false);
-      }, 100);
+      }, 500);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
       console.error("Error saving todo:", error);
@@ -208,7 +206,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
               Assigned To
             </Label>
             <Select
-              value={formData.assignedTo || "Donvine"}
+              value={formData.assignedTo}
               onValueChange={(value) => handleChange("assignedTo", value)}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select assignee" />
@@ -224,7 +222,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="note" className="text-right">
-              Note
+              Notes
             </Label>
             <Textarea
               id="note"
