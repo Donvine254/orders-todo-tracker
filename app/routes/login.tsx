@@ -40,16 +40,16 @@ export default function Login() {
   const isSubmitting = navigation.state === "submitting";
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <div className="w-full max-w-md space-y-6">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950">
+      <div className="flex min-h-screen items-center justify-center px-4 ">
+        <div className="w-full max-w-md space-y-6 bg-todo-primary dark:bg-gray-500/50 p-6 rounded-lg shadow ">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold">Orders Tracker</h1>
             <p className="text-gray-500 dark:text-gray-400">
               Enter your credentials to sign in
             </p>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 ">
             {actionData?.error && (
               <Alert variant="destructive">
                 <AlertDescription>{actionData.error}</AlertDescription>
@@ -62,7 +62,13 @@ export default function Login() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" name="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  required
+                  minLength={6}
+                />
               </div>
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (
