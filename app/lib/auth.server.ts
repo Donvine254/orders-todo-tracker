@@ -1,13 +1,14 @@
 import { SignJWT, jwtVerify } from "jose";
 import { createCookie } from "@remix-run/node";
 import bcrypt from "bcryptjs";
-const SECRET_KEY = new TextEncoder().encode(import.meta.env.JWT_SECRET!);
+import dotenv from "dotenv";
+dotenv.config();
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET!);
 const TOKEN_EXPIRY = 24 * 60 * 60;
 
 const user = {
-  email: "admin@orders-tracker.netlify.app",
-  password_digest:
-    "$2b$10$AYNmH7lPd54nBh17Cc9P6O/d4DOdhcQzp42whfpOKtoyAXMZSSG3K", // Admin@2025!
+  email: process.env.USER_EMAIL!,
+  password_digest: process.env.USER_SECRET!,
 };
 
 const sessionCookie = createCookie("session", {
@@ -18,15 +19,6 @@ const sessionCookie = createCookie("session", {
   maxAge: TOKEN_EXPIRY,
 });
 
-// async function hashPassword() {
-//   const password = "Admin@2025!";
-//   const saltRounds = 10;
-//   const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//   console.log("Hashed Password:", hashedPassword);
-// }
-
-// hashPassword();
 export async function login(email: string, password: string) {
   const isValid = email === user.email;
   if (!isValid) {

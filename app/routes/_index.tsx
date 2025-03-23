@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import StatusCards from "~/components/ui/status-cards";
 import AddTodoButton from "~/components/ui/add-todo";
 import { OrderTable } from "~/db/schema";
-import { db } from "~/db";
+import { db } from "~/db/index.server";
 import { redirect, useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/ui/orders-table";
 import { Loader2 } from "lucide-react";
