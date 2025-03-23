@@ -45,6 +45,7 @@ export default function Header() {
           Setup
         </Button>
       </div>
+      {/* TODO:add logout button */}
     </motion.div>
   );
 }

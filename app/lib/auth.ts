@@ -4,6 +4,12 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET!);
+
+console.log(
+  "process:" + process,
+  "secret key:" + SECRET_KEY,
+  "resolved_secret" + process.env.SECRET_KEY
+);
 const TOKEN_EXPIRY = 24 * 60 * 60;
 
 const user = {

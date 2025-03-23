@@ -20,7 +20,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { motion } from "framer-motion";
 import { redirect } from "@remix-run/react";
-import { isAuth } from "~/lib/auth.server";
+import { isAuth } from "~/lib/auth";
 
 export const loader = async ({ request }: { request: Request }) => {
   const isAuthenticated = await isAuth(request);

@@ -10,7 +10,7 @@ import { redirect, useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/ui/orders-table";
 import { Loader2 } from "lucide-react";
 import { asc, desc } from "drizzle-orm";
-import { isAuth } from "~/lib/auth.server";
+import { isAuth } from "~/lib/auth";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,10 +23,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request }: { request: Request }) => {
-  const isAuthenticated = await isAuth(request);
-  if (!isAuthenticated) {
-    return redirect("/login");
-  }
+  // const isAuthenticated = await isAuth(request);
+  // if (!isAuthenticated) {
+  //   return redirect("/login");
+  // }
   const todos = await db
     .select()
     .from(OrderTable)
