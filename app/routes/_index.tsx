@@ -9,6 +9,7 @@ import { db } from "~/db";
 import { useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/ui/orders-table";
 import { Loader2 } from "lucide-react";
+import { asc, desc } from "drizzle-orm";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,10 +22,13 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-  const todos = await db.select().from(OrderTable);
+  const todos = await db
+    .select()
+    .from(OrderTable)
+    .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
+
   return Response.json(todos);
 };
-
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
   const [isClient, setIsClient] = useState(false);
