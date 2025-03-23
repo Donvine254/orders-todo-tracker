@@ -8,13 +8,13 @@ async function hashPassword(password: string) {
 
 export async function main() {
   try {
-    const hashedPassword: string = await hashPassword("Donvine@2030!");
+    const hashedPassword: string = await hashPassword("example-password");
     const newUser = await db
       .insert(UserTable)
       .values({
-        email: "donvinemugendi@gmail.com",
-        username: "Donvine Mugendi",
-        role: "admin",
+        email: "user-email",
+        username: "johndoe",
+        role: "user",
         passwordDigest: hashedPassword,
       })
       .returning();
