@@ -38,7 +38,6 @@ export default function Login() {
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950">
       <div className="flex min-h-screen items-center justify-center px-4 ">
@@ -55,10 +54,17 @@ export default function Login() {
                 <AlertDescription>{actionData.error}</AlertDescription>
               </Alert>
             )}
+
             <Form method="post" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" name="email" required />
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  required
+                  className="dark:bg-gray-200 dark:text-black"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
@@ -68,6 +74,7 @@ export default function Login() {
                   name="password"
                   required
                   minLength={6}
+                  className="dark:bg-gray-200 dark:text-black"
                 />
               </div>
               <Button type="submit" className="w-full" disabled={isSubmitting}>
