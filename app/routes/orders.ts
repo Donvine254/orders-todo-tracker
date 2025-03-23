@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { OrderTable } from "~/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "~/db/index.server";
+import { db } from "~/db";
 // import { OrderData } from "~/types";
 
 // ✅ Handle API requests

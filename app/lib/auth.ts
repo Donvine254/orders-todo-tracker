@@ -1,8 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
 import { createCookie } from "@remix-run/node";
 import bcrypt from "bcryptjs";
-import dotenv from "dotenv";
-dotenv.config();
 const SECRET_KEY = new TextEncoder().encode(process.env.VITE_JWT_SECRET!);
 
 const TOKEN_EXPIRY = 24 * 60 * 60;
