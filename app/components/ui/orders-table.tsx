@@ -18,14 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
+
 import {
   Select,
   SelectContent,
@@ -55,6 +48,7 @@ import {
 } from "./table";
 import { updateOrder, deleteOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
+import { Badge } from "./badge";
 
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
@@ -62,6 +56,20 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
   const revalidator = useRevalidator();
+  // filter status
+  // eslint-disable-next-line
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<{
+    status: string | null;
+    priority: string | null;
+    assignee: string | null;
+  }>({
+    status: null,
+    priority: null,
+    assignee: null,
+  });
+
+  const isMobile = useIsMobile();
   // Table state
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -125,6 +133,62 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
     }
 
     return className;
+  };
+  // Handle status filter
+  const handleStatusFilter = (value: string) => {
+    if (value === "all") {
+      table.getColumn("completed")?.setFilterValue(undefined);
+      setAppliedFilters((prev) => ({ ...prev, status: null }));
+    } else {
+      const isCompleted = value === "completed";
+      table.getColumn("completed")?.setFilterValue(isCompleted);
+      setAppliedFilters((prev) => ({ ...prev, status: value }));
+    }
+  };
+
+  // Handle priority filter
+  const handlePriorityFilter = (value: string) => {
+    if (value === "all") {
+      table.getColumn("priority")?.setFilterValue(undefined);
+      setAppliedFilters((prev) => ({ ...prev, priority: null }));
+    } else {
+      table.getColumn("priority")?.setFilterValue([value]);
+      setAppliedFilters((prev) => ({ ...prev, priority: value }));
+    }
+  };
+
+  // Handle assignee filter
+  const handleAssigneeFilter = (value: string) => {
+    if (value === "all") {
+      table.getColumn("assignedTo")?.setFilterValue(undefined);
+      setAppliedFilters((prev) => ({ ...prev, assignee: null }));
+    } else {
+      table.getColumn("assignedTo")?.setFilterValue([value]);
+      setAppliedFilters((prev) => ({ ...prev, assignee: value }));
+    }
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    table.resetColumnFilters();
+    setAppliedFilters({
+      status: null,
+      priority: null,
+      assignee: null,
+    });
+  };
+
+  // Clear individual filter
+  const clearFilter = (filterType: "status" | "priority" | "assignee") => {
+    if (filterType === "status") {
+      table.getColumn("completed")?.setFilterValue(undefined);
+    } else if (filterType === "priority") {
+      table.getColumn("priority")?.setFilterValue(undefined);
+    } else if (filterType === "assignee") {
+      table.getColumn("assignedTo")?.setFilterValue(undefined);
+    }
+
+    setAppliedFilters((prev) => ({ ...prev, [filterType]: null }));
   };
 
   // Define table columns
@@ -303,12 +367,78 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       rowSelection,
     },
   });
+  const renderAppliedFilters = () => {
+    if (
+      !appliedFilters.status &&
+      !appliedFilters.priority &&
+      !appliedFilters.assignee
+    ) {
+      return null;
+    }
+
+    return (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {appliedFilters.status && (
+          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+            {appliedFilters.status === "completed"
+              ? "Completed"
+              : "In Progress"}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 p-0 ml-1"
+              onClick={() => clearFilter("status")}>
+              <X className="h-3 w-3" />
+            </Button>
+          </Badge>
+        )}
+
+        {appliedFilters.priority && (
+          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+            {appliedFilters.priority}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 p-0 ml-1"
+              onClick={() => clearFilter("priority")}>
+              <X className="h-3 w-3" />
+            </Button>
+          </Badge>
+        )}
+
+        {appliedFilters.assignee && (
+          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+            {appliedFilters.assignee}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 p-0 ml-1"
+              onClick={() => clearFilter("assignee")}>
+              <X className="h-3 w-3" />
+            </Button>
+          </Badge>
+        )}
+
+        {(appliedFilters.status ||
+          appliedFilters.priority ||
+          appliedFilters.assignee) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-xs"
+            onClick={clearAllFilters}>
+            Clear all
+          </Button>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
       <div className="space-y-4">
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
+        {/* <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="w-full md:w-1/4">
             <Select
               onValueChange={(value) => {
@@ -385,8 +515,89 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
               className="max-w-full"
             />
           </div>
-        </div>
+        </div> */}
+        {isMobile ? (
+          <div className="flex gap-2 mb-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Search orders..."
+                onChange={(e) =>
+                  table.getColumn("orderNumber")?.setFilterValue(e.target.value)
+                }
+                className="w-full"
+              />
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setFilterDialogOpen(true)}
+              className="flex-shrink-0">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="w-full md:w-1/4">
+              <Select
+                onValueChange={handleStatusFilter}
+                value={appliedFilters.status || "all"}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="inprogress">In Progress</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
+            <div className="w-full md:w-1/4">
+              <Select
+                onValueChange={handlePriorityFilter}
+                value={appliedFilters.priority || "all"}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Priorities</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full md:w-1/4">
+              <Select
+                onValueChange={handleAssigneeFilter}
+                value={appliedFilters.assignee || "all"}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by assignee" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Assignees</SelectItem>
+                  <SelectItem value="Jecinta">Jecinta</SelectItem>
+                  <SelectItem value="Donvine">Donvine</SelectItem>
+                  <SelectItem value="Mwambire">Mwambire</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full md:w-1/4">
+              <Input
+                placeholder="Search orders..."
+                onChange={(e) =>
+                  table.getColumn("orderNumber")?.setFilterValue(e.target.value)
+                }
+                className="max-w-full"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Applied Filters */}
+        {renderAppliedFilters()}
         <div className="rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 animate-fadeIn overflow-hidden">
           <Table className="orders-table">
             <TableHeader>
