@@ -636,78 +636,84 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         </AlertDialogContent>
       </AlertDialog>
       {/* add filter dialog */}
-      <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Filter Orders</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <label htmlFor="status-filter" className="text-sm font-medium">
-                Status
-              </label>
-              <Select
-                onValueChange={handleStatusFilter}
-                value={appliedFilters.status || "all"}>
-                <SelectTrigger id="status-filter">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="inprogress">In Progress</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+      {isMobile && (
+        <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Filter Orders</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <label htmlFor="status-filter" className="text-sm font-medium">
+                  Status
+                </label>
+                <Select
+                  onValueChange={handleStatusFilter}
+                  value={appliedFilters.status || "all"}>
+                  <SelectTrigger id="status-filter">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="inprogress">In Progress</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="grid gap-2">
-              <label htmlFor="priority-filter" className="text-sm font-medium">
-                Priority
-              </label>
-              <Select
-                onValueChange={handlePriorityFilter}
-                value={appliedFilters.priority || "all"}>
-                <SelectTrigger id="priority-filter">
-                  <SelectValue placeholder="Filter by priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Priorities</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="Low">Low</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="grid gap-2">
+                <label
+                  htmlFor="priority-filter"
+                  className="text-sm font-medium">
+                  Priority
+                </label>
+                <Select
+                  onValueChange={handlePriorityFilter}
+                  value={appliedFilters.priority || "all"}>
+                  <SelectTrigger id="priority-filter">
+                    <SelectValue placeholder="Filter by priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Priorities</SelectItem>
+                    <SelectItem value="High">High</SelectItem>
+                    <SelectItem value="Medium">Medium</SelectItem>
+                    <SelectItem value="Low">Low</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="grid gap-2">
-              <label htmlFor="assignee-filter" className="text-sm font-medium">
-                Assigned To
-              </label>
-              <Select
-                onValueChange={handleAssigneeFilter}
-                value={appliedFilters.assignee || "all"}>
-                <SelectTrigger id="assignee-filter">
-                  <SelectValue placeholder="Filter by assignee" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Assignees</SelectItem>
-                  <SelectItem value="Jecinta">Jecinta</SelectItem>
-                  <SelectItem value="Donvine">Donvine</SelectItem>
-                  <SelectItem value="Mwambire">Mwambire</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="grid gap-2">
+                <label
+                  htmlFor="assignee-filter"
+                  className="text-sm font-medium">
+                  Assigned To
+                </label>
+                <Select
+                  onValueChange={handleAssigneeFilter}
+                  value={appliedFilters.assignee || "all"}>
+                  <SelectTrigger id="assignee-filter">
+                    <SelectValue placeholder="Filter by assignee" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Assignees</SelectItem>
+                    <SelectItem value="Jecinta">Jecinta</SelectItem>
+                    <SelectItem value="Donvine">Donvine</SelectItem>
+                    <SelectItem value="Mwambire">Mwambire</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-          <DialogFooter className="flex justify-between">
-            <Button variant="outline" onClick={clearAllFilters}>
-              Clear All
-            </Button>
-            <Button type="button" onClick={() => setFilterDialogOpen(false)}>
-              Apply
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter className="flex justify-between">
+              <Button variant="outline" onClick={clearAllFilters}>
+                Clear All
+              </Button>
+              <Button type="button" onClick={() => setFilterDialogOpen(false)}>
+                Apply
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 };
