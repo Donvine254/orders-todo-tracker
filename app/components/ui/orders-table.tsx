@@ -464,6 +464,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
               />
               <Input
                 placeholder="Search orders..."
+                type="search"
                 onChange={(e) =>
                   table.getColumn("orderNumber")?.setFilterValue(e.target.value)
                 }
@@ -480,6 +481,20 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
           </div>
         ) : (
           <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="w-full md:w-1/4 relative">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
+              <Input
+                placeholder="Search orders..."
+                type="search"
+                onChange={(e) =>
+                  table.getColumn("orderNumber")?.setFilterValue(e.target.value)
+                }
+                className="max-w-full pl-10 dark:focus:bg-gray-300 dark:focus:text-black"
+              />
+            </div>
             <div className="w-full md:w-1/4">
               <Select
                 onValueChange={handleStatusFilter}
@@ -525,16 +540,6 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
                   <SelectItem value="Mwambire">Mwambire</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="w-full md:w-1/4">
-              <Input
-                placeholder="Search orders..."
-                onChange={(e) =>
-                  table.getColumn("orderNumber")?.setFilterValue(e.target.value)
-                }
-                className="max-w-full"
-              />
             </div>
           </div>
         )}
