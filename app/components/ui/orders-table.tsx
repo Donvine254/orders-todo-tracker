@@ -4,7 +4,7 @@ import { TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Button } from "./button";
-import { Pencil, Trash2, ArrowUpDown, Filter, X } from "lucide-react";
+import { Pencil, Trash2, ArrowUpDown, Filter, X, Search } from "lucide-react";
 import EditTodoDialog from "./edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "~/hooks/use-mobile";
@@ -18,7 +18,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./alert-dialog";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "./dialog";
 import {
   Select,
   SelectContent,
@@ -57,7 +63,6 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
   const revalidator = useRevalidator();
   // filter status
-  // eslint-disable-next-line
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<{
     status: string | null;
@@ -438,93 +443,19 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
     <>
       <div className="space-y-4">
         {/* Filters */}
-        {/* <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <div className="w-full md:w-1/4">
-            <Select
-              onValueChange={(value) => {
-                if (value === "all") {
-                  table.getColumn("completed")?.setFilterValue(undefined);
-                } else {
-                  table
-                    .getColumn("completed")
-                    ?.setFilterValue(value === "completed");
-                }
-              }}
-              defaultValue="inprogress">
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="inprogress">In Progress</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="w-full md:w-1/4">
-            <Select
-              onValueChange={(value) => {
-                if (value === "all") {
-                  table.getColumn("priority")?.setFilterValue(undefined);
-                } else {
-                  table.getColumn("priority")?.setFilterValue([value]);
-                }
-              }}
-              defaultValue="all">
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Priorities</SelectItem>
-                <SelectItem value="High">High</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="Low">Low</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="w-full md:w-1/4">
-            <Select
-              onValueChange={(value) => {
-                if (value === "all") {
-                  table.getColumn("assignedTo")?.setFilterValue(undefined);
-                } else {
-                  table.getColumn("assignedTo")?.setFilterValue([value]);
-                }
-              }}
-              defaultValue="all">
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by assignee" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Assignees</SelectItem>
-                <SelectItem value="Jecinta">Jecinta</SelectItem>
-                <SelectItem value="Donvine">Donvine</SelectItem>
-                <SelectItem value="Mwambire">Mwambire</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="w-full md:w-1/4">
-            <Input
-              placeholder="Search orders..."
-              onChange={(e) =>
-                table.getColumn("orderNumber")?.setFilterValue(e.target.value)
-              }
-              className="max-w-full"
-            />
-          </div>
-        </div> */}
         {isMobile ? (
           <div className="flex gap-2 mb-4">
-            <div className="flex-1">
+            <div className="flex-1 relative">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
               <Input
                 placeholder="Search orders..."
                 onChange={(e) =>
                   table.getColumn("orderNumber")?.setFilterValue(e.target.value)
                 }
-                className="w-full"
+                className="w-full pl-10 dark:focus:bg-gray-300 dark:focus:text-black"
               />
             </div>
             <Button
@@ -682,7 +613,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
       />
-
+      {/* delete dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -704,6 +635,79 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {/* add filter dialog */}
+      <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Filter Orders</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label htmlFor="status-filter" className="text-sm font-medium">
+                Status
+              </label>
+              <Select
+                onValueChange={handleStatusFilter}
+                value={appliedFilters.status || "all"}>
+                <SelectTrigger id="status-filter">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="inprogress">In Progress</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <label htmlFor="priority-filter" className="text-sm font-medium">
+                Priority
+              </label>
+              <Select
+                onValueChange={handlePriorityFilter}
+                value={appliedFilters.priority || "all"}>
+                <SelectTrigger id="priority-filter">
+                  <SelectValue placeholder="Filter by priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Priorities</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Low">Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <label htmlFor="assignee-filter" className="text-sm font-medium">
+                Assigned To
+              </label>
+              <Select
+                onValueChange={handleAssigneeFilter}
+                value={appliedFilters.assignee || "all"}>
+                <SelectTrigger id="assignee-filter">
+                  <SelectValue placeholder="Filter by assignee" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Assignees</SelectItem>
+                  <SelectItem value="Jecinta">Jecinta</SelectItem>
+                  <SelectItem value="Donvine">Donvine</SelectItem>
+                  <SelectItem value="Mwambire">Mwambire</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter className="flex justify-between">
+            <Button variant="outline" onClick={clearAllFilters}>
+              Clear All
+            </Button>
+            <Button type="button" onClick={() => setFilterDialogOpen(false)}>
+              Apply
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
