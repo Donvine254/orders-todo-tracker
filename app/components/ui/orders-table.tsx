@@ -481,7 +481,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
           </div>
         ) : (
           <div className="flex flex-col md:flex-row gap-4 mb-4">
-            <div className="w-full md:w-1/4 relative">
+            <div className="w-full md:flex-1 max-w-1/2 relative">
               <Search
                 size={18}
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -495,7 +495,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
                 className="max-w-full pl-10 dark:focus:bg-gray-300 dark:focus:text-black"
               />
             </div>
-            <div className="w-full md:w-1/4">
+            <div className="w-1/5 max-w-md">
               <Select
                 onValueChange={handleStatusFilter}
                 value={appliedFilters.status || "all"}>
@@ -510,7 +510,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
               </Select>
             </div>
 
-            <div className="w-full md:w-1/4">
+            <div className="w-1/5 max-w-md">
               <Select
                 onValueChange={handlePriorityFilter}
                 value={appliedFilters.priority || "all"}>
@@ -526,7 +526,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
               </Select>
             </div>
 
-            <div className="w-full md:w-1/4">
+            <div className="w-1/5 max-w-md">
               <Select
                 onValueChange={handleAssigneeFilter}
                 value={appliedFilters.assignee || "all"}>
