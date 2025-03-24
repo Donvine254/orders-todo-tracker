@@ -36,13 +36,13 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
-  const [isClient, setIsClient] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setIsMounted(true);
   }, []);
 
-  if (!isClient) {
+  if (!isMounted) {
     return (
       <div className="h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 flex justify-center items-center">
         <Loader2 size={64} className="animate-spin" />
