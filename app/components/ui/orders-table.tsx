@@ -4,9 +4,10 @@ import { TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
 import { Checkbox } from "./checkbox";
 import { Button } from "./button";
-import { Pencil, Trash2, ArrowUpDown } from "lucide-react";
+import { Pencil, Trash2, ArrowUpDown, Filter, X } from "lucide-react";
 import EditTodoDialog from "./edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
+import { useIsMobile } from "~/hooks/use-mobile";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +18,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
 import {
   Select,
   SelectContent,
