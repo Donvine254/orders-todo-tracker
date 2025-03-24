@@ -27,6 +27,10 @@ export const loader = async ({ request }: { request: Request }) => {
   if (!isAuthenticated) {
     return redirect("/login");
   }
+  return Response.json(
+    { message: "Authenticated successfully" },
+    { status: 200 }
+  );
 };
 const SetupPage = () => {
   const navigate = useNavigate();
@@ -84,26 +88,28 @@ const SetupPage = () => {
                 defaultValue="team"
                 value={activeTab}
                 onValueChange={handleTabChange}>
-                <TabsList className="flex justify-between gap-4 mb-6 overflow-x-auto overflow-y-hidden w-full py-4">
-                  <TabsTrigger
-                    value="team"
-                    className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
-                    <Users className="h-4 w-4 mr-2" />
-                    Team Members
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="system"
-                    className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
-                    <Settings className="h-4 w-4 mr-2" />
-                    System Settings
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="data"
-                    className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
-                    <Database className="h-4 w-4 mr-2" />
-                    Data Management
-                  </TabsTrigger>
-                </TabsList>
+                <div className="min-w-full px-1 py-1 overflow-x-auto">
+                  <TabsList className="inline-flex md:justify-between w-full min-w-max overflow-x-auto">
+                    <TabsTrigger
+                      value="team"
+                      className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
+                      <Users className="h-4 w-4 mr-2" />
+                      Team Members
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="system"
+                      className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
+                      <Settings className="h-4 w-4 mr-2" />
+                      System Settings
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="data"
+                      className="data-[state=active]:bg-todo-primary data-[state=active]:text-white">
+                      <Database className="h-4 w-4 mr-2" />
+                      Data Management
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
                 <TabsContent value="team" className="mt-0">
                   <div className="space-y-4">
