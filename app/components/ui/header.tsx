@@ -1,14 +1,34 @@
 import { useState, useEffect } from "react";
-
 import { Clipboard, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "~/components/ui/button";
-import { formatDate } from "../../lib/utils";
+import { formatDate } from "~/lib/utils";
+import { toast } from "sonner";
 
 export default function Header() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
+  async function handleLogout() {
+    try {
+      const response = await fetch("/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        toast.success("Logged out successfully");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } else {
+        console.error("Logout failed");
+        toast.error("Failed to process logout request");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,13 +57,20 @@ export default function Header() {
 
       <div className="flex flex-col md:flex-row items-center gap-4">
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>
-        <Button
-          variant="secondary"
-          className=" "
-          onClick={() => navigate("/setup")}>
-          <Settings className="h-4 w-4 mr-2" />
-          Setup
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" className=" ">
+            <a href="/setup" className="flex items-center gap-2">
+              <Settings className="h-4 w-4 mr-2" />
+              Setup
+            </a>
+          </Button>
+          <Button
+            variant="destructive"
+            className=" "
+            onClick={() => handleLogout()}>
+            Logout
+          </Button>
+        </div>
       </div>
       {/* TODO:add logout button */}
     </motion.div>
