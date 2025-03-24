@@ -113,11 +113,11 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const getPriorityStyles = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-todo-high";
+        return "bg-red-600 text-white";
       case "medium":
-        return "bg-todo-medium";
+        return "bg-amber-600 text-white";
       case "low":
-        return "bg-todo-low";
+        return "bg-green-600 text-white";
       default:
         return "bg-gray-400";
     }
@@ -384,7 +384,9 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
     return (
       <div className="flex flex-wrap gap-2 mb-4">
         {appliedFilters.status && (
-          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1 py-1 bg-purple-500 text-white">
             {appliedFilters.status === "completed"
               ? "Completed"
               : "In Progress"}
@@ -399,7 +401,15 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         )}
 
         {appliedFilters.priority && (
-          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+          <Badge
+            variant="secondary"
+            className={`flex items-center gap-1 py-1 text-white ${
+              appliedFilters.priority === "High"
+                ? "bg-red-600"
+                : appliedFilters.priority === "Medium"
+                ? "bg-amber-600"
+                : "bg-green-600"
+            }`}>
             {appliedFilters.priority}
             <Button
               variant="ghost"
@@ -412,7 +422,9 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         )}
 
         {appliedFilters.assignee && (
-          <Badge variant="secondary" className="flex items-center gap-1 py-1">
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1 py-1 dark:bg-gray-300 text-gray-800">
             {appliedFilters.assignee}
             <Button
               variant="ghost"
