@@ -2,37 +2,27 @@
 import { useState, useMemo } from "react";
 import { TodoOrder } from "~/types";
 import { formatDateTime, isOverdue, isDueToday } from "~/lib/utils";
-import { Checkbox } from "./checkbox";
-import { Button } from "./button";
+import { Checkbox } from "../ui/checkbox";
+import { Button } from "../ui/button";
 import { Pencil, Trash2, ArrowUpDown, Filter, X, Search } from "lucide-react";
-import EditTodoDialog from "./edit-dialog";
+import EditTodoDialog from "../ui/edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "~/hooks/use-mobile";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./alert-dialog";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "./dialog";
+} from "../ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./select";
-import { Input } from "./input";
+} from "../ui/select";
+import { Input } from "../ui/input";
 import {
   ColumnFiltersState,
   SortingState,
@@ -51,10 +41,11 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "./table";
+} from "../ui/table";
 import { updateOrder, deleteOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
-import { Badge } from "./badge";
+import { Badge } from "../ui/badge";
+import DeleteDialog from "./delete-dialog";
 // TODO: Refactor this component
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
@@ -635,27 +626,11 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         onOpenChange={setIsEditDialogOpen}
       />
       {/* delete dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to delete this order?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              order and remove it from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-red-500 hover:bg-red-600 text-white">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={confirmDelete}
+      />
       {/* add filter dialog */}
       {isMobile && (
         <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>

@@ -7,7 +7,7 @@ import AddTodoButton from "~/components/ui/add-todo";
 import { OrderTable } from "~/db/schema";
 import { db } from "~/db";
 import { redirect, useLoaderData } from "@remix-run/react";
-import OrdersTable from "~/components/ui/orders-table";
+import OrdersTable from "~/components/table/orders-table";
 import { Loader2 } from "lucide-react";
 import { asc, desc } from "drizzle-orm";
 import { isAuth } from "~/lib/auth";
