@@ -69,6 +69,7 @@ export default function Header() {
             </a>
           </Button>
           <Button
+            variant="outline"
             className="hover:bg-destructive hover:text-white "
             onClick={() => handleLogout()}>
             <LogOutIcon className="h-4 w-4" />
