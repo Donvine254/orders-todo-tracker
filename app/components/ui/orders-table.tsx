@@ -113,11 +113,11 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const getPriorityStyles = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-600 text-white";
+        return "bg-red-100 text-red-600";
       case "medium":
-        return "bg-amber-600 text-white";
+        return "bg-amber-100 text-amber-600";
       case "low":
-        return "bg-green-600 text-white";
+        return "bg-green-100 text-green-600";
       default:
         return "bg-gray-400";
     }
@@ -386,10 +386,10 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         {appliedFilters.status && (
           <Badge
             variant="secondary"
-            className={`flex items-center gap-1 py-1  text-white ${
+            className={`flex items-center gap-1 py-1 font-bold  ${
               appliedFilters.status === "completed"
-                ? "bg-green-600 "
-                : "bg-blue-600"
+                ? "bg-green-100 text-green-600 "
+                : "bg-blue-100 text-blue-600"
             }`}>
             {appliedFilters.status === "completed"
               ? "Completed"
@@ -407,12 +407,12 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         {appliedFilters.priority && (
           <Badge
             variant="secondary"
-            className={`flex items-center gap-1 py-1 text-white ${
+            className={`flex items-center gap-1 py-1  ${
               appliedFilters.priority === "High"
-                ? "bg-red-600"
+                ? "bg-red-100 text-red-500"
                 : appliedFilters.priority === "Medium"
-                ? "bg-amber-600"
-                : "bg-green-600"
+                ? "bg-amber-100 text-amber-600"
+                : "bg-green-100 text-green-600"
             }`}>
             {appliedFilters.priority}
             <Button
