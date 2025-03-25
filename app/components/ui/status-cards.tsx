@@ -46,7 +46,7 @@ const StatusCards = ({ data }: { data: TodoOrder[] }) => {
         </div>
       </motion.div>
 
-      <motion.div variants={item} className="status-card bg-blue-50">
+      <motion.div variants={item} className="status-card bg-blue-100">
         <div className="flex flex-col items-center">
           <div className="bg-blue-500 text-white p-2 rounded-full mb-2">
             <RotateCcw className="h-5 w-5" />

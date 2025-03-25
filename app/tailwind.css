@@ -94,14 +94,14 @@
 }
 
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.7);
+  background: #fff;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .dark .glassmorphism {
-  background: rgba(0, 0, 0, 0.5);
+  background: #2a6862;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -132,11 +132,11 @@
 }
 
 .orders-table td {
-  @apply p-3 border-b border-gray-100;
+  @apply p-3 border-b dark:border-gray-100;
 }
 
 .orders-table .completed {
-  @apply opacity-60;
+  @apply opacity-50;
 }
 
 .orders-table .completed td {
@@ -144,8 +144,8 @@
 }
 
 .status-card {
-  @apply p-4 rounded-md flex flex-col items-center justify-center shadow-sm;
-  @apply transition-all duration-300 hover:shadow-md hover:scale-[1.02];
+  @apply p-4 rounded-md flex flex-col items-center justify-center shadow-md;
+  @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02];
 }
 
 .priority-tag {

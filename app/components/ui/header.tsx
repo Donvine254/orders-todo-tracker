@@ -43,7 +43,7 @@ export default function Header() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="glassmorphism rounded-lg p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow mb-6 border dark:bg-todo-primary">
+      className="glassmorphism rounded-lg p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow mb-6 border ">
       <div className="flex items-center gap-4">
         <div className="text-todo-primary bg-todo-light p-3 rounded-full">
           <Clipboard className="h-8 w-8" />

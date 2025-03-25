@@ -55,7 +55,7 @@ import {
 import { updateOrder, deleteOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
 import { Badge } from "./badge";
-
+// TODO: Refactor this component
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
