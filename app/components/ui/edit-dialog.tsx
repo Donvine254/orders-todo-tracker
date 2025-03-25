@@ -103,7 +103,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         revalidator.revalidate();
         setTimeout(() => {
           onOpenChange(false);
-        }, 500);
+        }, 1000);
       } else {
         // Create new todo
         createTodoOrder(
@@ -113,7 +113,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
       revalidator.revalidate();
       setTimeout(() => {
         onOpenChange(false);
-      }, 500);
+      }, 1000);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
       console.error("Error saving todo:", error);
@@ -228,7 +228,8 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
               id="note"
               value={formData.note || ""}
               onChange={(e) => handleChange("note", e.target.value)}
-              className="col-span-3 "
+              className="col-span-3"
+              placeholder="Your personal notes for this order.."
               rows={3}
             />
           </div>
