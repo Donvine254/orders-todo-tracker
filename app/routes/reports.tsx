@@ -26,6 +26,7 @@ export const loader = async ({ request }: { request: Request }) => {
 
   return Response.json({ message: "Logged in successfully" });
 };
+
 export default function Index() {
   const [isMounted, setIsMounted] = useState(false);
   const [query, setQuery] = useState<{

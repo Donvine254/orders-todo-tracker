@@ -22,7 +22,6 @@ export async function loader() {
 export async function action({ request }: { request: Request }) {
   try {
     const method = request.method;
-
     if (method === "POST") {
       // Parse request data
       const { orderNumber, pages, dueDate, priority, assignedTo, note } =
