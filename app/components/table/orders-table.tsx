@@ -9,13 +9,6 @@ import EditTodoDialog from "../ui/edit-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "~/hooks/use-mobile";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "../ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -46,6 +39,7 @@ import { updateOrder, deleteOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
 import { Badge } from "../ui/badge";
 import DeleteDialog from "./delete-dialog";
+import FilterDialog from "./filter-dialog";
 // TODO: Refactor this component
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
@@ -633,82 +627,15 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
       />
       {/* add filter dialog */}
       {isMobile && (
-        <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Filter Orders</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <label htmlFor="status-filter" className="text-sm font-medium">
-                  Status
-                </label>
-                <Select
-                  onValueChange={handleStatusFilter}
-                  value={appliedFilters.status || "all"}>
-                  <SelectTrigger id="status-filter">
-                    <SelectValue placeholder="Filter by status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="inprogress">In Progress</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid gap-2">
-                <label
-                  htmlFor="priority-filter"
-                  className="text-sm font-medium">
-                  Priority
-                </label>
-                <Select
-                  onValueChange={handlePriorityFilter}
-                  value={appliedFilters.priority || "all"}>
-                  <SelectTrigger id="priority-filter">
-                    <SelectValue placeholder="Filter by priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Priorities</SelectItem>
-                    <SelectItem value="High">High</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="Low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid gap-2">
-                <label
-                  htmlFor="assignee-filter"
-                  className="text-sm font-medium">
-                  Assigned To
-                </label>
-                <Select
-                  onValueChange={handleAssigneeFilter}
-                  value={appliedFilters.assignee || "all"}>
-                  <SelectTrigger id="assignee-filter">
-                    <SelectValue placeholder="Filter by assignee" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Assignees</SelectItem>
-                    <SelectItem value="Jecinta">Jecinta</SelectItem>
-                    <SelectItem value="Donvine">Donvine</SelectItem>
-                    <SelectItem value="Mwambire">Mwambire</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter className="flex justify-between">
-              <Button variant="outline" onClick={clearAllFilters}>
-                Clear All
-              </Button>
-              <Button type="button" onClick={() => setFilterDialogOpen(false)}>
-                Apply
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <FilterDialog
+          open={filterDialogOpen}
+          onOpenChange={setFilterDialogOpen}
+          appliedFilters={appliedFilters}
+          handleStatusFilter={handleStatusFilter}
+          handlePriorityFilter={handlePriorityFilter}
+          handleAssigneeFilter={handleAssigneeFilter}
+          clearAllFilters={clearAllFilters}
+        />
       )}
     </>
   );
