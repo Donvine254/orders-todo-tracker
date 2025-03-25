@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import { OrderTable } from "~/db/schema";
-import { db } from "~/db";
-import { redirect, useLoaderData } from "@remix-run/react";
+import { redirect } from "@remix-run/react";
 import { Loader2 } from "lucide-react";
 import { isAuth } from "~/lib/auth";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { TodoOrder } from "~/types";
+import { DateRangePicker } from "~/components/reports/date-range-picker";
+import ReportFilters from "~/components/reports/report-filters";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -24,83 +23,46 @@ export const loader = async ({ request }: { request: Request }) => {
   if (!isAuthenticated) {
     return redirect("/login");
   }
-  const todos = await db.select().from(OrderTable);
 
-  return Response.json(todos);
+  return Response.json({ message: "Logged in successfully" });
 };
 export default function Index() {
-  const orders = useLoaderData<typeof loader>();
   const [isMounted, setIsMounted] = useState(false);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [selectedStatus, setSelectedStatus] = useState<string[]>([
-    "completed",
-    "inprogress",
-  ]);
-  const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
-  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<TodoOrder[]>([]);
-  console.log(orders);
+  const [query, setQuery] = useState<{
+    startDate: Date;
+    endDate: Date;
+    assignee: string;
+    completed: boolean | null;
+  }>({
+    startDate: new Date(),
+    endDate: new Date(),
+    assignee: "",
+    completed: null,
+  });
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  const handleDateRangeChange = (
-    start: Date | undefined,
-    end: Date | undefined
-  ) => {
-    setStartDate(start);
-    setEndDate(end);
-  };
-
-  const handleStatusChange = (status: string[]) => {
-    setSelectedStatus(status);
-  };
-
-  const handleAssigneeChange = (assignees: string[]) => {
-    setSelectedAssignees(assignees);
-  };
-
-  const handleOrderSelection = (orderIds: string[]) => {
-    setSelectedOrders(orderIds);
-  };
-  const handleGenerateReport = () => {
-    if (!startDate || !endDate) {
-      toast.error("Please select a date range");
-      return;
-    }
-
-    // Filter todos based on selected criteria
-    const filtered = orders.filter((todo: TodoOrder) => {
-      const todoDate = new Date(todo.dueDate);
-      const isInDateRange = todoDate >= startDate && todoDate <= endDate;
-
-      // Filter by completion status
-      const isStatusMatch = selectedStatus.includes("completed")
-        ? todo.completed
-          ? true
-          : false
-        : selectedStatus.includes("inprogress")
-        ? !todo.completed
-          ? true
-          : false
-        : false;
-
-      // Filter by assignee (if any selected)
-      const isAssigneeMatch =
-        selectedAssignees.length === 0 ||
-        selectedAssignees.includes(todo.assignedTo);
-
-      return isInDateRange && isStatusMatch && isAssigneeMatch;
+  const handleDateRangeChange = useCallback(
+    (range: { from: Date; to: Date } | undefined) => {
+      if (range) {
+        setQuery((prev) => ({
+          ...prev,
+          startDate: range.from,
+          endDate: range.to,
+        }));
+      }
+    },
+    []
+  );
+  const handleFilterReset = useCallback(() => {
+    setQuery({
+      startDate: new Date(),
+      endDate: new Date(),
+      assignee: "",
+      completed: null, // Reset status filter
     });
-
-    setFilteredTodos(filtered);
-
-    if (filtered.length === 0) {
-      toast.info("No orders found for the selected criteria");
-    } else {
-      toast.success(`Found ${filtered.length} orders matching your criteria`);
-    }
-  };
+  }, []);
 
   if (!isMounted) {
     return (
@@ -121,20 +83,17 @@ export default function Index() {
             <CardTitle>Report Parameters</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* <ReportDateRangePicker
-              startDate={startDate}
-              endDate={endDate}
-              onDateRangeChange={handleDateRangeChange}
+            <DateRangePicker
+              onChange={handleDateRangeChange}
+              placeholder="Select date ranges"
+              clearFilter={handleFilterReset}
             />
-
-            <ReportFilters
-              onStatusChange={handleStatusChange}
-              onAssigneeChange={handleAssigneeChange}
-              selectedStatus={selectedStatus}
-              selectedAssignees={selectedAssignees}
-            /> */}
-
-            <Button className="w-full" onClick={handleGenerateReport}>
+            <ReportFilters query={query} setQuery={setQuery} />
+            <Button
+              className="w-full"
+              onClick={() => {
+                console.log(query);
+              }}>
               Generate Report
             </Button>
           </CardContent>
