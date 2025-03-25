@@ -228,7 +228,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
               id="note"
               value={formData.note || ""}
               onChange={(e) => handleChange("note", e.target.value)}
-              className="col-span-3"
+              className="col-span-3 dark:focus:bg-gray-100 dark:focus:text-black"
               placeholder="Your personal notes for this order.."
               rows={3}
             />
