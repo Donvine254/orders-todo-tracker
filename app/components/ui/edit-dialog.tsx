@@ -143,7 +143,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
                 handleChange("orderNumber", parseInt(e.target.value) || 0)
               }
               required
-              className="col-span-3"
+              className="col-span-3 dark:bg-gray-300 dark:text-black"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -157,7 +157,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
               value={formData.pages}
               onChange={(e) => handleChange("pages", parseInt(e.target.value))}
               required
-              className="col-span-3"
+              className="col-span-3 dark:bg-gray-300 dark:text-black"
             />
           </div>
 

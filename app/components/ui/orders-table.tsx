@@ -386,7 +386,11 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         {appliedFilters.status && (
           <Badge
             variant="secondary"
-            className={`flex items-center gap-1 py-1  text-white ${appliedFilters.status === "completed"? "bg-green-600 ":"bg-blue-600"}`}>
+            className={`flex items-center gap-1 py-1  text-white ${
+              appliedFilters.status === "completed"
+                ? "bg-green-600 "
+                : "bg-blue-600"
+            }`}>
             {appliedFilters.status === "completed"
               ? "Completed"
               : "In Progress"}
@@ -460,7 +464,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             <div className="flex-1 relative">
               <Search
                 size={18}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-600"
               />
               <Input
                 placeholder="Search orders..."
@@ -468,7 +472,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
                 onChange={(e) =>
                   table.getColumn("orderNumber")?.setFilterValue(e.target.value)
                 }
-                className="w-full pl-10 dark:focus:bg-gray-300 dark:focus:text-black"
+                className="w-full pl-10 dark:bg-gray-300 dark:text-black dark:placeholder:text-gray-600 dark:focus:bg-gray-100"
               />
             </div>
             <Button
@@ -484,7 +488,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
             <div className="w-full md:flex-1 max-w-1/2 relative">
               <Search
                 size={18}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600"
               />
               <Input
                 placeholder="Search orders..."
@@ -492,7 +496,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
                 onChange={(e) =>
                   table.getColumn("orderNumber")?.setFilterValue(e.target.value)
                 }
-                className="max-w-full pl-10 dark:focus:bg-gray-300 dark:focus:text-black"
+                className="max-w-full pl-10 dark:bg-gray-300 dark:text-black dark:placeholder:text-gray-600 dark:focus:bg-gray-100"
               />
             </div>
             <div className="w-1/5 max-w-md">
