@@ -386,7 +386,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
         {appliedFilters.status && (
           <Badge
             variant="secondary"
-            className="flex items-center gap-1 py-1 bg-purple-500 text-white">
+            className={`flex items-center gap-1 py-1  text-white ${appliedFilters.status === "completed"? "bg-green-600 ":"bg-blue-600"}`}>
             {appliedFilters.status === "completed"
               ? "Completed"
               : "In Progress"}
