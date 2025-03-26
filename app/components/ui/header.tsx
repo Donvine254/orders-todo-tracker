@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogOutIcon, Settings } from "lucide-react";
+import { FileSpreadsheet, LogOutIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "~/components/ui/button";
@@ -82,9 +82,9 @@ export default function Header() {
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>
         <div className="flex items-center gap-2">
           <Button variant="secondary" className=" ">
-            <a href="/setup" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Setup
+            <a href="/reports" className="flex items-center gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Reports
             </a>
           </Button>
           <Button
