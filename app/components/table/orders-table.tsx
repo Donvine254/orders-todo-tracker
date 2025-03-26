@@ -29,7 +29,7 @@ import DeleteDialog from "./delete-dialog";
 import FilterDialog from "./filter-dialog";
 import TableFilters from "./table-filters";
 import TablePagination from "./pagination";
-import { createTodoTableColumns } from "./table-columns";
+import { useTodoTableColumns } from "./table-columns";
 // TODO: Refactor this component
 const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   const [editingTodo, setEditingTodo] = useState<TodoOrder | null>(null);
@@ -159,7 +159,7 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
   };
 
   // Define table columns
-  const columns = createTodoTableColumns(
+  const columns = useTodoTableColumns(
     handleToggleCompletion,
     handleEdit,
     openDeleteDialog
