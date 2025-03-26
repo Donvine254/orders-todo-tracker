@@ -126,6 +126,7 @@ export default function Index() {
             <ReportFilters query={query} setQuery={setQuery} />
             <Button
               className="w-full"
+              title="select a date range first"
               disabled={isSubmitting || !query.startDate || !query.endDate}
               onClick={handleGenerateReport}>
               {isSubmitting ? (

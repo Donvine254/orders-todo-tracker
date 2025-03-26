@@ -47,22 +47,22 @@ const ReportTable = ({
 
   return (
     <div>
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 animate-fadeIn overflow-hidden">
+        <Table className="orders-table md:text-base">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[50px]">
                 <Checkbox
                   checked={areAllSelected}
                   onCheckedChange={handleSelectAll}
+                  className="dark:bg-green-500 "
                   aria-label="Select all"
                 />
               </TableHead>
-              <TableHead>Order Number</TableHead>
+              <TableHead className="whitespace-nowrap"># Order</TableHead>
               <TableHead>Pages</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Assigned To</TableHead>
+              <TableHead className="whitespace-nowrap">Due Date</TableHead>
+              <TableHead className="whitespace-nowrap">Assigned To</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Notes</TableHead>
             </TableRow>
@@ -83,19 +83,6 @@ const ReportTable = ({
                 <TableCell>{todo.pages}</TableCell>
                 <TableCell>
                   {format(new Date(todo.dueDate), "MMM dd, yyyy")}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={
-                      todo.priority === "high"
-                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-                        : todo.priority === "medium"
-                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-                        : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                    }>
-                    {todo.priority}
-                  </Badge>
                 </TableCell>
                 <TableCell>{todo.assignedTo || "Unassigned"}</TableCell>
                 <TableCell>
