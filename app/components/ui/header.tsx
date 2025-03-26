@@ -44,35 +44,40 @@ export default function Header() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="glassmorphism  rounded-lg p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow mb-6 border">
-      <img
-        src="https://res.cloudinary.com/dipkbpinx/image/upload/v1742926193/logos/rphbzk7aho7rlc9biwob.png"
-        style={{
-          maxWidth: "120px",
-          height: "auto",
-          verticalAlign: "middle",
-          fontStyle: "italic",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-        className="dark:hidden"
-        alt="logo"
-        fetchpriority="high"
-      />
-      {/* add a logo for dark theme */}
-      <img
-        src="https://res.cloudinary.com/dipkbpinx/image/upload/v1742885355/logos/gvqi8mshjwwqdw1f08aw.png"
-        className="hidden dark:block"
-        style={{
-          maxWidth: "120px",
-          height: "auto",
-          verticalAlign: "middle",
-          fontStyle: "italic",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-        alt="logo"
-        fetchpriority="high"
-      />
+      <a
+        href="/"
+        className="no-underline text-inherit hover:no-underline focus:no-underline">
+        {" "}
+        <img
+          src="https://res.cloudinary.com/dipkbpinx/image/upload/v1742926193/logos/rphbzk7aho7rlc9biwob.png"
+          style={{
+            maxWidth: "120px",
+            height: "auto",
+            verticalAlign: "middle",
+            fontStyle: "italic",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+          className="dark:hidden"
+          alt="logo"
+          fetchpriority="high"
+        />
+        {/* add a logo for dark theme */}
+        <img
+          src="https://res.cloudinary.com/dipkbpinx/image/upload/v1742885355/logos/gvqi8mshjwwqdw1f08aw.png"
+          className="hidden dark:block"
+          style={{
+            maxWidth: "120px",
+            height: "auto",
+            verticalAlign: "middle",
+            fontStyle: "italic",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+          alt="logo"
+          fetchpriority="high"
+        />
+      </a>
       <div className="flex flex-col md:flex-row items-center gap-4">
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>
         <div className="flex items-center gap-2">
