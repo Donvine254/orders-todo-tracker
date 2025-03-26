@@ -11,6 +11,7 @@ import { TodoOrder } from "~/types";
 import { toast } from "sonner";
 import ReportTable from "~/components/reports/report-table";
 import Header from "~/components/ui/header";
+import ExportOptions from "~/components/reports/export-options";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -143,12 +144,12 @@ export default function Index() {
             <CardTitle>Export Options</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* <ExportOptions
-              filteredTodos={filteredTodos}
+            <ExportOptions
+              data={orders}
               selectedOrders={selectedOrders}
-              startDate={startDate}
-              endDate={endDate}
-            /> */}
+              startDate={query.startDate as Date}
+              endDate={query.endDate as Date}
+            />
           </CardContent>
         </Card>
       </div>
