@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FileSpreadsheet, LogOutIcon } from "lucide-react";
+import { FileSpreadsheet, HomeIcon, LogOutIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "~/components/ui/button";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 export default function Header() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
+  const pathname = window.location.pathname;
   async function handleLogout() {
     try {
       const response = await fetch("/logout", {
@@ -82,10 +83,17 @@ export default function Header() {
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>
         <div className="flex items-center gap-2">
           <Button variant="secondary" className=" ">
-            <a href="/reports" className="flex items-center gap-2">
-              <FileSpreadsheet className="h-4 w-4" />
-              Reports
-            </a>
+            {pathname.startsWith("/reports") ? (
+              <a href="/" className="flex items-center gap-2">
+                <HomeIcon className="h-4 w-4" />
+                Home
+              </a>
+            ) : (
+              <a href="/reports" className="flex items-center gap-2">
+                <FileSpreadsheet className="h-4 w-4" />
+                Reports
+              </a>
+            )}
           </Button>
           <Button
             variant="outline"
