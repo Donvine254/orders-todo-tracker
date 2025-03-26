@@ -55,7 +55,7 @@ const ReportTable = ({
                 <Checkbox
                   checked={areAllSelected}
                   onCheckedChange={handleSelectAll}
-                  className="dark:bg-green-500 "
+                  className="bg-white "
                   aria-label="Select all"
                 />
               </TableHead>
