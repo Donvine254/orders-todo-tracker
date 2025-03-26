@@ -14,7 +14,7 @@ import { isAuth } from "~/lib/auth";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "TODO Order Tracker" },
+    { title: "Order Status Tracker" },
     {
       name: "description",
       content: "A simple website to track order progress!",

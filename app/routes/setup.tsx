@@ -21,7 +21,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { motion } from "framer-motion";
 import { redirect } from "@remix-run/react";
 import { isAuth } from "~/lib/auth";
+import { MetaFunction } from "@remix-run/node";
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Setup | Order Status Tracker" },
+    {
+      name: "description",
+      content: "A simple website to track order progress!",
+    },
+  ];
+};
 export const loader = async ({ request }: { request: Request }) => {
   const isAuthenticated = await isAuth(request);
   if (!isAuthenticated) {
@@ -32,6 +42,7 @@ export const loader = async ({ request }: { request: Request }) => {
     { status: 200 }
   );
 };
+
 const SetupPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("team");

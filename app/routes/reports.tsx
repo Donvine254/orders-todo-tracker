@@ -14,7 +14,7 @@ import Header from "~/components/ui/header";
 import ExportOptions from "~/components/reports/export-options";
 export const meta: MetaFunction = () => {
   return [
-    { title: "TODO Order Tracker" },
+    { title: "Reports | Order Status Tracker" },
     {
       name: "description",
       content: "A simple website to track order progress!",
