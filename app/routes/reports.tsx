@@ -75,7 +75,7 @@ export default function Index() {
   async function handleGenerateReport() {
     setIsSubmitting(true);
     try {
-      const response = await fetch("/reports/orders", {
+      const response = await fetch("/api/reports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

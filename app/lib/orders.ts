@@ -5,7 +5,7 @@ export async function createTodoOrder(
   data: Omit<TodoOrder, "id" | "createdAt" | "updatedAt">
 ) {
   try {
-    const response = await fetch("/orders", {
+    const response = await fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export async function updateOrder(
       }
       data.dueDate = parsedDate.toISOString();
     }
-    const response = await fetch("/orders", {
+    const response = await fetch("/api/orders", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export async function deleteOrder(id: string) {
       throw new Error("Order ID is required");
     }
 
-    const response = await fetch(`/orders`, {
+    const response = await fetch(`/api/orders`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
