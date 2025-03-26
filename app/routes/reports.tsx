@@ -10,6 +10,7 @@ import ReportFilters from "~/components/reports/report-filters";
 import { TodoOrder } from "~/types";
 import { toast } from "sonner";
 import ReportTable from "~/components/reports/report-table";
+import Header from "~/components/ui/header";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -34,13 +35,13 @@ export default function Index() {
   const [orders, setOrders] = useState<TodoOrder[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [query, setQuery] = useState<{
-    startDate: Date;
-    endDate: Date;
+    startDate: Date | null;
+    endDate: Date | null;
     assignee: string;
     completed: boolean | null;
   }>({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
     assignee: "",
     completed: null,
   });
@@ -63,8 +64,8 @@ export default function Index() {
   );
   const handleFilterReset = useCallback(() => {
     setQuery({
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: null,
+      endDate: null,
       assignee: "",
       completed: null, // Reset status filter
     });
@@ -109,10 +110,8 @@ export default function Index() {
   }
   return (
     <div className="min-h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 p-4 md:p-6 mx-auto py-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl md:text-2xl font-bold ">Generate Reports</h1>
-      </div>
-
+      <Header />
+      <h1 className="text-xl md:text-2xl font-bold">Generate Reports</h1>
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -127,7 +126,7 @@ export default function Index() {
             <ReportFilters query={query} setQuery={setQuery} />
             <Button
               className="w-full"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !query.startDate || !query.endDate}
               onClick={handleGenerateReport}>
               {isSubmitting ? (
                 <Loader2 size={24} className="animate-spin" />

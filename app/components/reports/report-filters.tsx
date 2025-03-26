@@ -8,8 +8,8 @@ interface ReportFiltersProps {
   };
   setQuery: React.Dispatch<
     React.SetStateAction<{
-      startDate: Date;
-      endDate: Date;
+      startDate: Date | null;
+      endDate: Date | null;
       assignee: string;
       completed: boolean | null;
     }>
