@@ -3,11 +3,13 @@ import type { MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
 import { Loader2 } from "lucide-react";
 import { isAuth } from "~/lib/auth";
-// import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { DateRangePicker } from "~/components/reports/date-range-picker";
 import ReportFilters from "~/components/reports/report-filters";
+import { TodoOrder } from "~/types";
+import { toast } from "sonner";
+import ReportTable from "~/components/reports/report-table";
 export const meta: MetaFunction = () => {
   return [
     { title: "TODO Order Tracker" },
@@ -29,6 +31,8 @@ export const loader = async ({ request }: { request: Request }) => {
 
 export default function Index() {
   const [isMounted, setIsMounted] = useState(false);
+  const [orders, setOrders] = useState<TodoOrder[]>([]);
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [query, setQuery] = useState<{
     startDate: Date;
     endDate: Date;
@@ -40,6 +44,7 @@ export default function Index() {
     assignee: "",
     completed: null,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -64,6 +69,36 @@ export default function Index() {
       completed: null, // Reset status filter
     });
   }, []);
+  const handleOrderSelection = (orderIds: string[]) => {
+    setSelectedOrders(orderIds);
+  };
+  async function handleGenerateReport() {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/reports/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(query),
+      });
+      if (!response.ok) {
+        toast.error("Failed to generate report");
+        throw new Error("Failed to generate report");
+      }
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length < 0) {
+        toast.info("No orders found for the selected criteria");
+        throw new Error("Invalid response data");
+      }
+      setOrders(data);
+      toast.success(`Found ${data.length} orders matching criteria`);
+    } catch (error) {
+      toast.error("No matching orders found");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   if (!isMounted) {
     return (
@@ -92,10 +127,13 @@ export default function Index() {
             <ReportFilters query={query} setQuery={setQuery} />
             <Button
               className="w-full"
-              onClick={() => {
-                console.log(query);
-              }}>
-              Generate Report
+              disabled={isSubmitting}
+              onClick={handleGenerateReport}>
+              {isSubmitting ? (
+                <Loader2 size={24} className="animate-spin" />
+              ) : (
+                "Generate Report"
+              )}
             </Button>
           </CardContent>
         </Card>
@@ -115,20 +153,20 @@ export default function Index() {
         </Card>
       </div>
 
-      {/* {filteredTodos.length > 0 && (
+      {orders.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>Report Preview</CardTitle>
           </CardHeader>
           <CardContent>
             <ReportTable
-              todos={filteredTodos}
+              data={orders}
               selectedOrders={selectedOrders}
               onOrderSelectionChange={handleOrderSelection}
             />
           </CardContent>
         </Card>
-      )} */}
+      )}
     </div>
   );
 }
