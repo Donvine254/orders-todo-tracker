@@ -56,7 +56,7 @@ export default function Header() {
         }}
         className="dark:hidden"
         alt="logo"
-        fetchPriority="high"
+        fetchpriority="high"
       />
       {/* add a logo for dark theme */}
       <img
@@ -71,7 +71,7 @@ export default function Header() {
           backgroundSize: "cover",
         }}
         alt="logo"
-        fetchPriority="high"
+        fetchpriority="high"
       />
       <div className="flex flex-col md:flex-row items-center gap-4">
         <p className="text-lg font-medium">{formatDate(currentDate)}</p>

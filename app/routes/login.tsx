@@ -61,7 +61,7 @@ export default function Login() {
           }}
           className="dark:hidden"
           alt="logo"
-          fetchPriority="high"
+          fetchpriority="high"
         />
         {/* add a logo for dark theme */}
         <img
@@ -76,7 +76,7 @@ export default function Login() {
             backgroundSize: "cover",
           }}
           alt="logo"
-          fetchPriority="high"
+          fetchpriority="high"
         />
         {/* beginning of form */}
         <div className="flex flex-col gap-6 w-full max-w-md shadow">
