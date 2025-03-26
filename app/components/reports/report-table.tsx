@@ -62,7 +62,7 @@ const ReportTable = ({
               <TableHead className="whitespace-nowrap"># Order</TableHead>
               <TableHead>Pages</TableHead>
               <TableHead className="whitespace-nowrap">Due Date</TableHead>
-              <TableHead className="whitespace-nowrap">Assigned To</TableHead>
+              <TableHead className="whitespace-nowrap">Writer</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Notes</TableHead>
             </TableRow>
@@ -81,16 +81,16 @@ const ReportTable = ({
                 </TableCell>
                 <TableCell>{todo.orderNumber}</TableCell>
                 <TableCell>{todo.pages}</TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap min-w-24">
                   {format(new Date(todo.dueDate), "MMM dd, yyyy")}
                 </TableCell>
                 <TableCell>{todo.assignedTo || "Unassigned"}</TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   <Badge variant={todo.completed ? "default" : "secondary"}>
-                    {todo.completed ? "Completed" : "In Progress"}
+                    {todo.completed ? "Completed" : "In-Progress"}
                   </Badge>
                 </TableCell>
-                <TableCell>{todo.note}</TableCell>
+                <TableCell className="min-w-48">{todo.note}</TableCell>
               </TableRow>
             ))}
             {data.length === 0 && (
