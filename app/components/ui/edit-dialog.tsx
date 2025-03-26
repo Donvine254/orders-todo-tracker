@@ -103,7 +103,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         revalidator.revalidate();
         setTimeout(() => {
           onOpenChange(false);
-        }, 1000);
+        }, 500);
       } else {
         // Create new todo
         createTodoOrder(
@@ -113,7 +113,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
       revalidator.revalidate();
       setTimeout(() => {
         onOpenChange(false);
-      }, 1000);
+      }, 500);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
       console.error("Error saving todo:", error);
