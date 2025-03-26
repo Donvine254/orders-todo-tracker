@@ -29,33 +29,32 @@ export function DateRangePicker({
   };
 
   return (
-    <div
-      className={cn(
-        "grid gap-2 xsm:gap-0.5 w-full md:w-full md:group-has-[[data-collapsible=icon]]/sidebar-wrapper:w-fit lg:md:group-has-[[data-collapsible=icon]]/sidebar-wrapper:w-full",
-        className
-      )}>
+    <div className={cn("grid gap-2 xsm:gap-0.5 w-full", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant="outline"
             className={cn(
-              "w-full justify-start xsm:text-xs text-left font-normal truncate",
+              "w-full flex items-center justify-between xsm:text-xs text-left font-normal truncate",
               !date && "text-muted-foreground"
             )}>
-            <CalendarIcon className="mr-2 xsm:mr-0.5 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
+            <span className="flex items-center truncate">
+              <CalendarIcon className="mr-2 xsm:mr-0.5 h-4 w-4" />
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date.from, "LLL dd, y")} -{" "}
+                    {format(date.to, "LLL dd, y")}
+                  </>
+                ) : (
+                  format(date.from, "LLL dd, y")
+                )
               ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>{placeholder}</span>
-            )}
+                <span>{placeholder}</span>
+              )}
+            </span>
+
             {date && (
               // eslint-disable-next-line
               <span
@@ -64,9 +63,9 @@ export function DateRangePicker({
                   setDate(undefined);
                   clearFilter();
                 }}
-                className="cursor-pointer hover:text-red-500 z-10"
-                title="clear filters">
-                <X className="h-4 w-4 " />
+                className="cursor-pointer hover:text-red-500 z-10 ml-auto pl-2"
+                title="Clear filters">
+                <X className="h-4 w-4" />
               </span>
             )}
           </Button>
