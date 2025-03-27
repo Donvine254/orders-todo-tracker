@@ -27,6 +27,11 @@ export const getStats = (data: TodoOrder[]) => {
     };
   } catch (error) {
     console.error("Service error getting todo stats:", error);
-    throw error;
+    return {
+      dueToday: 0,
+      overdue: 0,
+      inProgress: 0,
+      completed: 0,
+    };
   }
 };
