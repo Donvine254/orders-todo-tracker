@@ -129,11 +129,11 @@ export default function Index() {
         {/* card for conditions */}
         <Card className="max-w-md md:col-span-1 max-h-fit md:sticky md:top-20">
           <CardHeader className="px-0 bg-muted mb-4 rounded-t-md py-2">
-            <CardTitle className="font-bold text-xl px-3 flex items-center gap-2 ">
-              Conditions
+            <CardTitle className="font-bold md:text-xl px-3 flex items-center gap-2 ">
+              Filters
               <span title="Filter report by date, writer and status">
                 {" "}
-                <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+                <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500 text-white" />
               </span>
             </CardTitle>
           </CardHeader>
@@ -144,13 +144,13 @@ export default function Index() {
               clearFilter={handleFilterReset}
             />
             <ReportFilters query={query} setQuery={setQuery} />
-            <div className="flex items-center gap-4">
-              <Button
-                variant="link"
-                className="w-full"
+            <div className="flex items-center justify-between gap-4">
+              <button
+                className="w-full text-primary underline-offset-4 hover:underline text-start"
+                title="reset filters"
                 onClick={handleFilterReset}>
                 Reset All
-              </Button>
+              </button>
               <Button
                 className="w-full"
                 title="select a date range first"
@@ -170,11 +170,11 @@ export default function Index() {
           <CardHeader className="px-0 mb-4 py-2">
             {" "}
             <CardTitle className="flex items-center justify-between gap-4 px-3 ">
-              <span className="font-bold text-xl flex items-center gap-2">
+              <span className="font-bold md:text-xl flex items-center gap-2">
                 Report Overview{" "}
                 <span title="You must first select orders to export">
                   {" "}
-                  <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+                  <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500 text-white" />
                 </span>
               </span>
               <ExportButton

@@ -83,6 +83,19 @@ const ReportFilters = ({ query, setQuery }: ReportFiltersProps) => {
           ))}
         </div>
       </div>
+      <div className="flex items-center gap-2 justify-between">
+        <p className="font-medium whitespace-nowrap">Results Per Page:</p>
+        <select
+          id="pages-filter"
+          className="w-fit border-b-2 px-2 dark:border-gray-400 dark:bg-background  focus:outline-none"
+          defaultValue={100}>
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+        </select>
+      </div>
     </div>
   );
 };
