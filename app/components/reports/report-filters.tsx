@@ -16,11 +16,11 @@ interface ReportFiltersProps {
   >;
 }
 
-const assignees = ["Donvine", "Jecinta", "Mwambire"];
+const assignees = ["", "Donvine", "Jecinta", "Mwambire"];
 
 const ReportFilters = ({ query, setQuery }: ReportFiltersProps) => {
   // Handle status change
-  const handleStatusChange = (completed: boolean) => {
+  const handleStatusChange = (completed: boolean | null) => {
     setQuery((prev) => ({ ...prev, completed }));
   };
 
@@ -37,6 +37,14 @@ const ReportFilters = ({ query, setQuery }: ReportFiltersProps) => {
       <div>
         <h3 className="text-lg font-medium mb-2">Order Status</h3>
         <div className="flex flex-col space-y-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="status-completed"
+              checked={query.completed === null}
+              onCheckedChange={() => handleStatusChange(null)}
+            />
+            <Label htmlFor="status-completed">All</Label>
+          </div>
           <div className="flex items-center space-x-2">
             <Checkbox
               id="status-completed"
@@ -57,16 +65,20 @@ const ReportFilters = ({ query, setQuery }: ReportFiltersProps) => {
       </div>
 
       <div>
-        <h3 className="text-lg font-medium mb-2">Assigned To</h3>
+        <h3 className="text-lg font-medium mb-2">Writer</h3>
         <div className="flex flex-col space-y-2">
           {assignees.map((assignee) => (
-            <div key={assignee} className="flex items-center space-x-2">
+            <div
+              key={assignee || "all"}
+              className="flex items-center space-x-2">
               <Checkbox
-                id={`assignee-${assignee}`}
+                id={`assignee-${assignee || "all"}`}
                 checked={query.assignee === assignee}
                 onCheckedChange={() => handleAssigneeChange(assignee)}
               />
-              <Label htmlFor={`assignee-${assignee}`}>{assignee}</Label>
+              <Label htmlFor={`assignee-${assignee || "all"}`}>
+                {assignee ? assignee : "All"}
+              </Label>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
-import { Loader2 } from "lucide-react";
+import { CircleHelp, Loader2 } from "lucide-react";
 import { isAuth } from "~/lib/auth";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -11,7 +11,7 @@ import { TodoOrder } from "~/types";
 import { toast } from "sonner";
 import ReportTable from "~/components/reports/report-table";
 import Header from "~/components/ui/header";
-import ExportOptions from "~/components/reports/export-options";
+import ExportButton from "~/components/reports/export-button";
 export const meta: MetaFunction = () => {
   return [
     { title: "Reports | Order Status Tracker" },
@@ -113,18 +113,31 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 p-4 md:p-6 mx-auto py-6 space-y-6">
       <Header />
       <h1 className="text-xl md:text-2xl font-bold">Generate Reports</h1>
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Report Parameters</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <DateRangePicker
-              onChange={handleDateRangeChange}
-              placeholder="Select date ranges"
-              clearFilter={handleFilterReset}
-            />
-            <ReportFilters query={query} setQuery={setQuery} />
+
+      <Card className="max-w-md">
+        <CardHeader>
+          <CardTitle className="font-bold text-xl flex items-center gap-2">
+            Report Parameters{" "}
+            <span title="Filter report by date, writer and status">
+              {" "}
+              <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <DateRangePicker
+            onChange={handleDateRangeChange}
+            placeholder="Select date ranges"
+            clearFilter={handleFilterReset}
+          />
+          <ReportFilters query={query} setQuery={setQuery} />
+          <div className="flex items-center gap-4">
+            <Button
+              variant="link"
+              className="w-full"
+              onClick={handleFilterReset}>
+              Reset All
+            </Button>
             <Button
               className="w-full"
               title="select a date range first"
@@ -136,36 +149,33 @@ export default function Index() {
                 "Generate Report"
               )}
             </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Export Options</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ExportOptions
-              data={orders}
-              selectedOrders={selectedOrders}
-              startDate={query.startDate as Date}
-              endDate={query.endDate as Date}
-            />
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Report Preview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ReportTable
-            data={orders}
-            selectedOrders={selectedOrders}
-            onOrderSelectionChange={handleOrderSelection}
-          />
+          </div>
         </CardContent>
       </Card>
+
+      <div>
+        <div className="py-4 flex items-center justify-between gap-4">
+          <h2 className="font-bold text-xl flex items-center gap-2">
+            Report Overview{" "}
+            <span title="You must first select orders to export">
+              {" "}
+              <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+            </span>
+          </h2>
+          <ExportButton
+            data={orders}
+            selectedOrders={selectedOrders}
+            startDate={query.startDate as Date}
+            endDate={query.endDate as Date}
+          />
+        </div>
+
+        <ReportTable
+          data={orders}
+          selectedOrders={selectedOrders}
+          onOrderSelectionChange={handleOrderSelection}
+        />
+      </div>
     </div>
   );
 }
