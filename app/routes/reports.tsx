@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import ReportTable from "~/components/reports/report-table";
 import Header from "~/components/ui/header";
 import ExportButton from "~/components/reports/export-button";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "Reports | Order Status Tracker" },
@@ -70,6 +71,7 @@ export default function Index() {
       assignee: "",
       completed: null, // Reset status filter
     });
+    setOrders([]);
   }, []);
   const handleOrderSelection = (orderIds: string[]) => {
     setSelectedOrders(orderIds);
@@ -113,68 +115,75 @@ export default function Index() {
     <div className="min-h-screen bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950 p-4 md:p-6 mx-auto py-6 space-y-6">
       <Header />
       <h1 className="text-xl md:text-2xl font-bold">Generate Reports</h1>
+      <div className="md:grid md:grid-cols-3 md:gap-4 md:border md:p-1 md:rounded-md md:relative">
+        {/* card for conditions */}
+        <Card className="max-w-md md:col-span-1 max-h-fit md:sticky md:top-20">
+          <CardHeader className="px-0 bg-muted mb-4 rounded-t-md py-2">
+            <CardTitle className="font-bold text-xl px-3 flex items-center gap-2 ">
+              Conditions
+              <span title="Filter report by date, writer and status">
+                {" "}
+                <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <DateRangePicker
+              onChange={handleDateRangeChange}
+              placeholder="Select date ranges"
+              clearFilter={handleFilterReset}
+            />
+            <ReportFilters query={query} setQuery={setQuery} />
+            <div className="flex items-center gap-4">
+              <Button
+                variant="link"
+                className="w-full"
+                onClick={handleFilterReset}>
+                Reset All
+              </Button>
+              <Button
+                className="w-full"
+                title="select a date range first"
+                disabled={isSubmitting || !query.startDate || !query.endDate}
+                onClick={handleGenerateReport}>
+                {isSubmitting ? (
+                  <Loader2 size={24} className="animate-spin" />
+                ) : (
+                  "Generate Report"
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+        {/* card for table */}
+        <Card className="md:col-span-2 !p-0 border-none bg-transparent">
+          <CardHeader className="px-0 mb-4 py-2">
+            {" "}
+            <CardTitle className="flex items-center justify-between gap-4 px-3 ">
+              <span className="font-bold text-xl flex items-center gap-2">
+                Report Overview{" "}
+                <span title="You must first select orders to export">
+                  {" "}
+                  <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
+                </span>
+              </span>
+              <ExportButton
+                data={orders}
+                selectedOrders={selectedOrders}
+                startDate={query.startDate as Date}
+                endDate={query.endDate as Date}
+              />
+            </CardTitle>
+          </CardHeader>
 
-      <Card className="max-w-md">
-        <CardHeader>
-          <CardTitle className="font-bold text-xl flex items-center gap-2">
-            Report Parameters{" "}
-            <span title="Filter report by date, writer and status">
-              {" "}
-              <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
-            </span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <DateRangePicker
-            onChange={handleDateRangeChange}
-            placeholder="Select date ranges"
-            clearFilter={handleFilterReset}
-          />
-          <ReportFilters query={query} setQuery={setQuery} />
-          <div className="flex items-center gap-4">
-            <Button
-              variant="link"
-              className="w-full"
-              onClick={handleFilterReset}>
-              Reset All
-            </Button>
-            <Button
-              className="w-full"
-              title="select a date range first"
-              disabled={isSubmitting || !query.startDate || !query.endDate}
-              onClick={handleGenerateReport}>
-              {isSubmitting ? (
-                <Loader2 size={24} className="animate-spin" />
-              ) : (
-                "Generate Report"
-              )}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div>
-        <div className="py-4 flex items-center justify-between gap-4">
-          <h2 className="font-bold text-xl flex items-center gap-2">
-            Report Overview{" "}
-            <span title="You must first select orders to export">
-              {" "}
-              <CircleHelp className="h-4 w-4 cursor-pointer fill-blue-500" />
-            </span>
-          </h2>
-          <ExportButton
-            data={orders}
-            selectedOrders={selectedOrders}
-            startDate={query.startDate as Date}
-            endDate={query.endDate as Date}
-          />
-        </div>
-
-        <ReportTable
-          data={orders}
-          selectedOrders={selectedOrders}
-          onOrderSelectionChange={handleOrderSelection}
-        />
+          <CardContent className="px-0">
+            <ReportTable
+              data={orders}
+              selectedOrders={selectedOrders}
+              onOrderSelectionChange={handleOrderSelection}
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

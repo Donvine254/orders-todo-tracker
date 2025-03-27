@@ -49,7 +49,7 @@ const ReportTable = ({
   return (
     <div>
       <div className="rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 animate-fadeIn overflow-hidden">
-        <Table className="orders-table md:text-base">
+        <Table className="orders-table">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[50px]">
@@ -101,7 +101,7 @@ const ReportTable = ({
                     )}
                   </Badge>
                 </TableCell>
-                <TableCell className="min-w-fit">{todo.note}</TableCell>
+                <TableCell className="min-w-48">{todo.note}</TableCell>
               </TableRow>
             ))}
             {data.length === 0 && (
