@@ -3,7 +3,7 @@ import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { login } from "~/lib/auth";
+import { register } from "~/lib/auth";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   Card,
@@ -18,6 +18,7 @@ export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const username = formData.get("username") as string;
 
   if (!email || !password) {
     return Response.json(
@@ -27,12 +28,8 @@ export async function action({ request }: { request: Request }) {
   }
 
   try {
-    const session = await login(email, password);
-    return redirect("/", {
-      headers: {
-        "Set-Cookie": session,
-      },
-    });
+    await register(email, username, password);
+    return redirect("/auth/login");
     // eslint-disable-next-line
   } catch (error: any) {
     return Response.json(
@@ -63,7 +60,7 @@ export default function Login() {
           }}
           className="dark:hidden"
           alt="logo"
-          fetchpriority="high"
+          fetchPriority="high"
         />
         {/* add a logo for dark theme */}
         <img
@@ -78,7 +75,7 @@ export default function Login() {
             backgroundSize: "cover",
           }}
           alt="logo"
-          fetchpriority="high"
+          fetchPriority="high"
         />
         {/* beginning of form */}
         <div className="flex flex-col gap-6 w-full max-w-md shadow">
@@ -100,6 +97,7 @@ export default function Login() {
                         type="email"
                         name="email"
                         autoComplete="email"
+                        pattern="^[A-Za-z0- 9._+\-']+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
                         className="[&:not(:placeholder-shown):invalid]:border-destructive dark:bg-gray-300 dark:text-black dark:focus:bg-gray-100"
                         placeholder="you@example.com"
                         required
@@ -109,9 +107,21 @@ export default function Login() {
                       <Label htmlFor="username">Username</Label>
                       <Input
                         id="username"
-                        type="username"
+                        type="text"
                         name="username"
-                        autoComplete="new-username"
+                        onInput={() => {
+                          const usernameInput = document.getElementById(
+                            "username"
+                          ) as HTMLInputElement;
+                          const usernameRegex = /^(?!.*@).*$/;
+                          if (!usernameRegex.test(usernameInput.value)) {
+                            usernameInput.setCustomValidity(
+                              "Username cannot be the same as an email or contain '@'"
+                            );
+                          } else {
+                            usernameInput.setCustomValidity("");
+                          }
+                        }}
                         className="[&:not(:placeholder-shown):invalid]:border-destructive dark:bg-gray-300 dark:text-black dark:focus:bg-gray-100"
                         placeholder="John Doe"
                         required
@@ -121,7 +131,11 @@ export default function Login() {
                     <div className="grid gap-2">
                       <div className="flex items-center">
                         <Label htmlFor="password">Password</Label>
-                        <span className="ml-auto">
+                        <span
+                          className="ml-auto"
+                          title={
+                            showPassword ? "hide password" : "show password"
+                          }>
                           {!showPassword ? (
                             <EyeOff
                               className="ml-auto h-4 w-4"
@@ -139,10 +153,11 @@ export default function Login() {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         name="password"
+                        autoComplete="false"
                         className="[&:not(:placeholder-shown):invalid]:border-destructive dark:bg-gray-300 dark:text-black dark:focus:bg-gray-100"
                         placeholder="********"
                         required
-                        minLength={6}
+                        minLength={8}
                       />
                       {actionData?.error && (
                         <small className="text-destructive">

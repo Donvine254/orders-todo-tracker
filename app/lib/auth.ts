@@ -54,3 +54,32 @@ export async function isAuth(request: Request) {
     return null;
   }
 }
+
+export async function register(
+  email: string,
+  username: string,
+  password: string
+) {
+  if (!email || !username || !password) {
+    throw new Error("Missing required fields");
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db
+      .insert(UserTable)
+      .values({
+        email: "user-email",
+        username: "johndoe",
+        role: "user",
+        passwordDigest: hashedPassword,
+      })
+      .returning();
+    return Response.json({ message: "Account created successfully" });
+    // eslint-disable-next-line
+  } catch (error: any) {
+    if (error.code === "23505") {
+      throw new Error("Email or username already exists.");
+    }
+    throw new Error(error.message || "Something went wrong");
+  }
+}
