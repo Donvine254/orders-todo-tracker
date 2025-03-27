@@ -12,7 +12,7 @@ export default function Header() {
   const pathname = window.location.pathname;
   async function handleLogout() {
     try {
-      const response = await fetch("/logout", {
+      const response = await fetch("/auth/logout", {
         method: "POST",
         credentials: "include",
       });
@@ -20,7 +20,7 @@ export default function Header() {
       if (response.ok) {
         toast.success("Logged out successfully");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/auth/login");
         }, 1000);
       } else {
         console.error("Logout failed");

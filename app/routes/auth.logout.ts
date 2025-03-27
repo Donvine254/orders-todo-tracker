@@ -1,7 +1,7 @@
 import { redirect } from "@remix-run/node";
 
 export async function loader() {
-  return redirect("/login", {
+  return redirect("/auth/login", {
     headers: {
       "Set-Cookie":
         "session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0",

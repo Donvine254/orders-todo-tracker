@@ -35,7 +35,7 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: { request: Request }) => {
   const isAuthenticated = await isAuth(request);
   if (!isAuthenticated) {
-    return redirect("/login");
+    return redirect("/auth/login");
   }
   return Response.json(
     { message: "Authenticated successfully" },
