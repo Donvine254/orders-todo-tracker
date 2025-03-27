@@ -96,7 +96,7 @@ const ReportTable = ({
             {data.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} className="h-24 text-center">
-                  No orders found for the selected criteria
+                  No data available
                 </TableCell>
               </TableRow>
             )}

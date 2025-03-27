@@ -154,20 +154,18 @@ export default function Index() {
         </Card>
       </div>
 
-      {orders.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Report Preview</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ReportTable
-              data={orders}
-              selectedOrders={selectedOrders}
-              onOrderSelectionChange={handleOrderSelection}
-            />
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader>
+          <CardTitle>Report Preview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ReportTable
+            data={orders}
+            selectedOrders={selectedOrders}
+            onOrderSelectionChange={handleOrderSelection}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }
