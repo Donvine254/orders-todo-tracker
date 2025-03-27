@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
 import { CircleHelp, Loader2 } from "lucide-react";
 import { isAuth } from "~/lib/auth";
 import { Button } from "~/components/ui/button";
@@ -12,6 +12,9 @@ import { toast } from "sonner";
 import ReportTable from "~/components/reports/report-table";
 import Header from "~/components/ui/header";
 import ExportButton from "~/components/reports/export-button";
+import { OrderTable } from "~/db/schema";
+import { db } from "~/db";
+import { desc } from "drizzle-orm";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,12 +32,19 @@ export const loader = async ({ request }: { request: Request }) => {
     return redirect("/auth/login");
   }
 
-  return Response.json({ message: "Logged in successfully" });
+  const data = await db
+    .select()
+    .from(OrderTable)
+    .orderBy(desc(OrderTable.createdAt))
+    .limit(10);
+
+  return Response.json(data);
 };
 
 export default function Index() {
   const [isMounted, setIsMounted] = useState(false);
-  const [orders, setOrders] = useState<TodoOrder[]>([]);
+  const loaderData = useLoaderData<typeof loader>();
+  const [orders, setOrders] = useState<TodoOrder[]>(loaderData || []);
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [query, setQuery] = useState<{
     startDate: Date | null;
@@ -71,8 +81,8 @@ export default function Index() {
       assignee: "",
       completed: null, // Reset status filter
     });
-    setOrders([]);
-  }, []);
+    setOrders(loaderData || []);
+  }, [loaderData]);
   const handleOrderSelection = (orderIds: string[]) => {
     setSelectedOrders(orderIds);
   };
