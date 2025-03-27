@@ -10,6 +10,7 @@ import {
 } from "../ui/table";
 import { format } from "date-fns";
 import { Badge } from "../ui/badge";
+import { CircleCheck, Loader } from "lucide-react";
 
 interface ReportTableProps {
   data: TodoOrder[];
@@ -87,10 +88,20 @@ const ReportTable = ({
                 <TableCell>{todo.assignedTo || "Unassigned"}</TableCell>
                 <TableCell className="whitespace-nowrap">
                   <Badge variant={todo.completed ? "default" : "secondary"}>
-                    {todo.completed ? "Completed" : "In-Progress"}
+                    {todo.completed ? (
+                      <>
+                        <CircleCheck className="h-4 w-4 mr-2" />
+                        Completed{" "}
+                      </>
+                    ) : (
+                      <>
+                        <Loader className="h-4 w-4 mr-2" />
+                        In-Progress{" "}
+                      </>
+                    )}
                   </Badge>
                 </TableCell>
-                <TableCell className="min-w-48">{todo.note}</TableCell>
+                <TableCell className="min-w-fit">{todo.note}</TableCell>
               </TableRow>
             ))}
             {data.length === 0 && (
