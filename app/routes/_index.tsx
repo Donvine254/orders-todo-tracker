@@ -9,8 +9,9 @@ import { db } from "~/db";
 import { redirect, useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/table/orders-table";
 import { Loader2 } from "lucide-react";
-import { asc, desc } from "drizzle-orm";
+import { and, asc, between, desc, eq } from "drizzle-orm";
 import { isAuth } from "~/lib/auth";
+import { endOfDay, startOfDay } from "date-fns";
 
 export const meta: MetaFunction = () => {
   return [
@@ -31,6 +32,23 @@ export const loader = async ({ request }: { request: Request }) => {
     .select()
     .from(OrderTable)
     .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
+
+  // Run the update in the background
+  setImmediate(async () => {
+    await db
+      .update(OrderTable)
+      .set({ priority: "high", updatedAt: new Date() })
+      .where(
+        and(
+          eq(OrderTable.completed, false),
+          between(
+            OrderTable.dueDate,
+            startOfDay(new Date()),
+            endOfDay(new Date())
+          )
+        )
+      );
+  });
 
   return Response.json(todos);
 };
