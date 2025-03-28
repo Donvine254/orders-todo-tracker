@@ -64,7 +64,11 @@
     --input: 160 15% 20%;
     --ring: 160 30% 40%;
   }
-
+  @layer utilities {
+    .animation-delay-700 {
+      animation-delay: 700ms;
+    }
+  }
   * {
     @apply border-border;
   }

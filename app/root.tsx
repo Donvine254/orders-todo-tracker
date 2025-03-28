@@ -14,6 +14,7 @@ import "./tailwind.css";
 import { ThemeProvider } from "./components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
 import NotFound from "./components/pages/not-found";
+import ServerError from "./components/pages/server-error";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -64,12 +65,7 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     return <NotFound />;
   }
-  return (
-    <div className="flex flex-col items-center justify-center h-screen text-center bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950">
-      <h1 className="text-2xl font-bold">An unexpected error occurred.</h1>
-      <p className="text-muted-foreground">Please try again later.</p>
-    </div>
-  );
+  return <ServerError />;
 }
 
 export default function App() {
