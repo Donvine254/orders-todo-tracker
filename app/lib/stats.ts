@@ -14,10 +14,12 @@ export const getStats = (data: TodoOrder[]) => {
 
       overdue: data.filter((todo) => {
         const dueDate = new Date(todo.dueDate);
+        const now = new Date();
+        const twoHoursBefore = new Date(now.getTime() + 2 * 60 * 60 * 1000);
         return (
           !todo.completed &&
-          dueDate < new Date() &&
-          dueDate.toDateString() !== today.toDateString()
+          (dueDate <= twoHoursBefore ||
+            (dueDate <= now && dueDate.toDateString() !== now.toDateString()))
         );
       }).length,
 

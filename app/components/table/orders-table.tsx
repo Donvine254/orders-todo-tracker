@@ -90,10 +90,10 @@ const OrdersTable = ({ data }: { data: TodoOrder[] }) => {
 
     if (todo.completed) {
       className += "completed bg-gray-50 dark:bg-gray-800/30 ";
-    } else if (isDueToday(new Date(todo.dueDate))) {
-      className += "bg-red-50 dark:bg-red-900/20 ";
     } else if (isOverdue(new Date(todo.dueDate))) {
-      className += "bg-orange-50 dark:bg-orange-900/20 ";
+      className += "bg-red-50 text-red-500 dark:bg-red-900/20 ";
+    } else if (isDueToday(new Date(todo.dueDate))) {
+      className += "bg-orange-50  dark:bg-orange-900/20 ";
     } else {
       className +=
         todo.id.indexOf("5") !== -1 ? "bg-todo-light dark:bg-gray-800/20 " : "";
