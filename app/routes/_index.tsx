@@ -28,29 +28,37 @@ export const loader = async ({ request }: { request: Request }) => {
   if (!isAuthenticated) {
     return redirect("/auth/login");
   }
-  const todos = await db
-    .select()
-    .from(OrderTable)
-    .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
+  try {
+    const todos = await db
+      .select()
+      .from(OrderTable)
+      .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
 
-  // Run the update in the background
-  setImmediate(async () => {
-    await db
-      .update(OrderTable)
-      .set({ priority: "high", updatedAt: new Date() })
-      .where(
-        and(
-          eq(OrderTable.completed, false),
-          between(
-            OrderTable.dueDate,
-            startOfDay(new Date()),
-            endOfDay(new Date())
+    // Run the update in the background
+    setImmediate(async () => {
+      await db
+        .update(OrderTable)
+        .set({ priority: "high", updatedAt: new Date() })
+        .where(
+          and(
+            eq(OrderTable.completed, false),
+            between(
+              OrderTable.dueDate,
+              startOfDay(new Date()),
+              endOfDay(new Date())
+            )
           )
-        )
-      );
-  });
+        );
+    });
 
-  return Response.json(todos);
+    return Response.json(todos);
+  } catch (error) {
+    console.error("Loader error:", error);
+    return Response.json(
+      { error: "Something went wrong, please try again later." },
+      { status: 500 }
+    );
+  }
 };
 export default function Index() {
   const orders = useLoaderData<typeof loader>();
