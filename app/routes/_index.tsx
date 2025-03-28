@@ -35,7 +35,7 @@ export const loader = async ({ request }: { request: Request }) => {
       .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
 
     // Run the update in the background
-    setImmediate(async () => {
+    Promise.resolve().then(async () => {
       await db
         .update(OrderTable)
         .set({ priority: "high", updatedAt: new Date() })
