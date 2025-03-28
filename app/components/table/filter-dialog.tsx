@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-
 interface FilterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -101,12 +100,12 @@ const FilterDialog: React.FC<FilterDialogProps> = ({
             </Select>
           </div>
         </div>
-        <DialogFooter className="flex justify-between">
-          <Button variant="outline" onClick={clearAllFilters}>
-            Clear All
-          </Button>
+        <DialogFooter className="flex flex-row gap-6">
           <Button type="button" onClick={() => onOpenChange(false)}>
             Apply
+          </Button>
+          <Button variant="link" onClick={clearAllFilters}>
+            Clear All
           </Button>
         </DialogFooter>
       </DialogContent>
