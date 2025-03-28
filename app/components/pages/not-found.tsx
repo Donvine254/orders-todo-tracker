@@ -45,7 +45,7 @@ const NotFound = () => {
                   Return to Home
                 </a>
               </Button>
-              <Button onClick={() => window.history.back()} variant="secondary">
+              <Button onClick={() => window.history.back()} variant="outline">
                 <MoveLeft className="h-4 w-4 mr-2" /> Go Back
               </Button>
             </div>

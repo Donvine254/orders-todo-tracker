@@ -61,9 +61,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-
   if (isRouteErrorResponse(error)) {
-    return <NotFound />;
+    if (error.status === 404) {
+      return <NotFound />;
+    }
+    return <ServerError />;
   }
   return <ServerError />;
 }
