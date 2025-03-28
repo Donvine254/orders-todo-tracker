@@ -64,6 +64,12 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     return <NotFound />;
   }
+  return (
+    <div className="flex flex-col items-center justify-center h-screen text-center bg-gradient-to-b from-todo-light to-white dark:from-gray-900 dark:to-gray-950">
+      <h1 className="text-2xl font-bold">An unexpected error occurred.</h1>
+      <p className="text-muted-foreground">Please try again later.</p>
+    </div>
+  );
 }
 
 export default function App() {
