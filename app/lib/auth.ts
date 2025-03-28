@@ -68,8 +68,8 @@ export async function register(
     await db
       .insert(UserTable)
       .values({
-        email: "user-email",
-        username: "johndoe",
+        email: email,
+        username: username,
         role: "user",
         passwordDigest: hashedPassword,
       })
