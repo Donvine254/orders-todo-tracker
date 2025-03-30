@@ -9,7 +9,7 @@ import { db } from "~/db";
 import { redirect, useLoaderData } from "@remix-run/react";
 import OrdersTable from "~/components/table/orders-table";
 import { Loader2 } from "lucide-react";
-import { and, asc, between, desc, eq } from "drizzle-orm";
+import { and, asc, between, eq } from "drizzle-orm";
 import { isAuth } from "~/lib/auth";
 import { endOfDay, startOfDay } from "date-fns";
 
@@ -32,7 +32,7 @@ export const loader = async ({ request }: { request: Request }) => {
     const todos = await db
       .select()
       .from(OrderTable)
-      .orderBy(asc(OrderTable.completed), desc(OrderTable.createdAt));
+      .orderBy(asc(OrderTable.completed), asc(OrderTable.dueDate));
 
     // Run the update in the background
     Promise.resolve().then(async () => {
