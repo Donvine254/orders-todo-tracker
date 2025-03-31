@@ -24,8 +24,15 @@ export async function action({ request }: { request: Request }) {
     const method = request.method;
     if (method === "POST") {
       // Parse request data
-      const { orderNumber, pages, dueDate, priority, assignedTo, note } =
-        await request.json();
+      const {
+        orderNumber,
+        pages,
+        dueDate,
+        priority,
+        assignedTo,
+        note,
+        completed,
+      } = await request.json();
 
       if (!orderNumber || !pages || !dueDate || !priority) {
         return Response.json(
@@ -43,6 +50,7 @@ export async function action({ request }: { request: Request }) {
           priority,
           assignedTo,
           note,
+          completed,
         })
         .returning();
       return Response.json({ success: true, order: newOrder });

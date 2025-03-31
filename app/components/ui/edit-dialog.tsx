@@ -23,14 +23,13 @@ import { formatDateForInput } from "~/lib/utils";
 import { toast } from "sonner";
 import { createTodoOrder, updateOrder } from "~/lib/orders";
 import { useRevalidator } from "@remix-run/react";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface EditTodoDialogProps {
   todo: TodoOrder | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-// const ASSIGNEES: Assignee[] = ['Jecinta', 'Donvine', 'Mwambire', ''];
 
 const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
   const revalidator = useRevalidator();
@@ -61,7 +60,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         pages: 1,
         dueDate,
         priority: "low",
-        assignedTo: "Donvine",
+        assignedTo: "N/A",
         note: "",
         completed: false,
       });
@@ -109,11 +108,11 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
         createTodoOrder(
           formData as Omit<TodoOrder, "id" | "createdAt" | "updatedAt">
         );
+        revalidator.revalidate();
+        setTimeout(() => {
+          onOpenChange(false);
+        }, 500);
       }
-      revalidator.revalidate();
-      setTimeout(() => {
-        onOpenChange(false);
-      }, 500);
     } catch (error) {
       toast.error("An error occurred. Please try again.");
       console.error("Error saving todo:", error);
@@ -127,6 +126,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
           <DialogTitle className="text-xl font-medium">
             {todo ? "Edit Order" : "Add New Order"}
           </DialogTitle>
+          <DialogDescription />
         </DialogHeader>
 
         <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-2">
@@ -203,7 +203,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="assignedTo" className="text-right">
-              Assigned To
+              Assignee
             </Label>
             <Select
               value={formData.assignedTo}
@@ -253,8 +253,7 @@ const EditTodoDialog = ({ todo, open, onOpenChange }: EditTodoDialogProps) => {
             </div>
           </div>
         </div>
-
-        <DialogFooter>
+        <DialogFooter className="flex flex-row-reverse gap-6">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
