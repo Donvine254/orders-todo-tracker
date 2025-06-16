@@ -29,3 +29,13 @@ export interface TodoStats {
   inProgress: number;
   completed: number;
 }
+
+export interface User {
+  id: string;
+  email:string;
+  username: string;
+  role: "admin" | "user";
+  createdAt: Date | string;
+  password_digest?: string; // Optional for user data, not needed in UI
+  updatedAt?: Date | string; // Optional for user data, not needed in UI
+}
