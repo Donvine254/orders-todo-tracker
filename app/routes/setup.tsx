@@ -19,9 +19,13 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { motion } from "framer-motion";
-import { redirect } from "@remix-run/react";
+import { redirect, useLoaderData } from "@remix-run/react";
 import { isAuth } from "~/lib/auth";
 import { MetaFunction } from "@remix-run/node";
+import { UserTable } from "~/db/schema";
+import { db } from "~/db";
+import { desc } from "drizzle-orm";
+import TeamMemberTable from "~/components/user-table/table";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,17 +41,25 @@ export const loader = async ({ request }: { request: Request }) => {
   if (!isAuthenticated) {
     return redirect("/auth/login");
   }
-  return Response.json(
-    { message: "Authenticated successfully" },
-    { status: 200 }
-  );
+  const data = await db
+    .select({
+      id: UserTable.id,
+      email: UserTable.email,
+      username: UserTable.username,
+      createdAt: UserTable.createdAt,
+      role: UserTable.role,
+    })
+    .from(UserTable)
+    .orderBy(desc(UserTable.createdAt));
+
+  return Response.json(data);
 };
 
 const SetupPage = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("team");
   const [isMounted, setIsMounted] = useState(false);
-
+  const loaderData = useLoaderData<typeof loader>();
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -128,15 +140,7 @@ const SetupPage = () => {
                       This section allows you to manage team members who can be
                       assigned to orders.
                     </p>
-
-                    <div className="p-6 border rounded-md bg-gray-50 text-center">
-                      <Clock className="h-12 w-12 mx-auto mb-4 text-todo-primary opacity-50" />
-                      <p className="text-lg font-medium mb-2">Coming Soon</p>
-                      <p className="text-muted-foreground">
-                        Team management functionality will be available in the
-                        next update.
-                      </p>
-                    </div>
+                    <TeamMemberTable members={loaderData} />
                   </div>
                 </TabsContent>
 
