@@ -110,6 +110,7 @@ const TeamMemberForm = ({
           <Label htmlFor="role">Role</Label>
           <Select
             value={memberData.role || "user"}
+            disabled={!member}
             onValueChange={(value) => handleChange("role", value)}
             required>
             <SelectTrigger>
