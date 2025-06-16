@@ -59,8 +59,10 @@ const TeamMemberTable = ({ members }: TeamMemberTableProps) => {
           <TableBody>
             {members.map((member) => (
               <TableRow key={member.id}>
-                <TableCell className="font-medium">{member.username}</TableCell>
-                <TableCell>{member.email}</TableCell>
+                <TableCell className="font-medium text-nowrap text-ellipsis">
+                  {member.username}
+                </TableCell>
+                <TableCell className="text-ellipsis">{member.email}</TableCell>
                 <TableCell>
                   <Badge variant={getRoleBadgeVariant(member.role)}>
                     {member.role}
