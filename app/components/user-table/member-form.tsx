@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -31,14 +31,36 @@ const TeamMemberForm = ({
   onSubmit,
   onCancel,
 }: TeamMemberFormProps) => {
-  const [username, setUsername] = useState(member?.username || "");
-  const [email, setEmail] = useState(member?.email || "");
-  const [role, setRole] = useState(member?.role || "");
+  const [memberData, setMemberData] = useState({
+    username: "",
+    email: "",
+    role: "",
+  });
+
+  const handleChange = (field: keyof typeof memberData, value: string) => {
+    setMemberData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  useEffect(() => {
+    if (member) {
+      setMemberData({
+        username: member.username || "",
+        email: member.email || "",
+        role: member.role || "",
+      });
+    }
+  }, [member]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username.trim() && email.trim() && role) {
-      onSubmit({ username: username.trim(), email: email.trim(), role });
+    if (
+      memberData.username.trim() &&
+      memberData.email.trim() &&
+      memberData.role
+    ) {
+      onSubmit(memberData);
     }
   };
 
@@ -62,8 +84,8 @@ const TeamMemberForm = ({
             id="username"
             className="[&:not(:placeholder-shown):invalid]:border-destructive dark:bg-gray-300 dark:text-black dark:focus:bg-gray-100"
             minLength={3}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={memberData.username}
+            onChange={(e) => handleChange("username", e.target.value)}
             placeholder="Enter full name"
             required
           />
@@ -74,11 +96,11 @@ const TeamMemberForm = ({
           <Input
             id="email"
             type="email"
-            value={email}
+            value={memberData.email}
             autoComplete="email"
             pattern="^[A-Za-z0- 9._+\-']+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
             className="[&:not(:placeholder-shown):invalid]:border-destructive dark:bg-gray-300 dark:text-black dark:focus:bg-gray-100"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChange("email", e.target.value)}
             placeholder="Enter email address"
             required
           />
@@ -86,7 +108,10 @@ const TeamMemberForm = ({
 
         <div className="space-y-2">
           <Label htmlFor="role">Role</Label>
-          <Select value={role} onValueChange={setRole} required>
+          <Select
+            value={memberData.role || "user"}
+            onValueChange={(value) => handleChange("role", value)}
+            required>
             <SelectTrigger>
               <SelectValue placeholder="Select a role" />
             </SelectTrigger>
