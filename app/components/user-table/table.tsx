@@ -12,6 +12,7 @@ import { Badge } from "~/components/ui/badge";
 import { Dialog } from "~/components/ui/dialog";
 import { Edit, Trash2, UserPlus } from "lucide-react";
 import { User } from "~/types";
+import TeamMemberForm from "./member-form";
 
 interface TeamMemberTableProps {
   members: User[];
@@ -19,7 +20,7 @@ interface TeamMemberTableProps {
 
 const TeamMemberTable = ({ members }: TeamMemberTableProps) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-
+  const [editingMember, setEditingMember] = useState<User | null>(null);
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
       case "admin":
@@ -31,11 +32,21 @@ const TeamMemberTable = ({ members }: TeamMemberTableProps) => {
     }
   };
 
+  const handleFormSubmit = () => {
+    setIsFormOpen(false);
+    setEditingMember(null);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Team Members ({members.length})</h3>
-        <Button className="bg-todo-primary hover:bg-todo-primary/90">
+        <Button
+          className="bg-todo-primary hover:bg-todo-primary/90"
+          onClick={() => {
+            setEditingMember(null);
+            setIsFormOpen(true);
+          }}>
           <UserPlus className="h-4 w-4 mr-2" />
           Add Member
         </Button>
@@ -91,11 +102,14 @@ const TeamMemberTable = ({ members }: TeamMemberTableProps) => {
       )}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        {/* <TeamMemberForm
+        <TeamMemberForm
           member={editingMember || undefined}
           onSubmit={handleFormSubmit}
-          onCancel={handleFormCancel}
-        /> */}
+          onCancel={() => {
+            setIsFormOpen(false);
+            setEditingMember(null);
+          }}
+        />
       </Dialog>
 
       {/* <DeleteConfirmationDialog
